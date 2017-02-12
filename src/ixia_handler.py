@@ -106,7 +106,7 @@ class IxiaHandler(object):
                     physical_add = re.sub(r'[^./0-9 ]', r'', FullAddress)
                     self.logger.info("Logical Port %s will be reserved now on Physical location %s" %
                                      (str(port_name), str(physical_add)))
-                    port.reserve(physical_add,force=True)
+                    port.reserve(physical_add,force=True,wait_for_up=False)
 
         else:
             for port_name, port in self.ports.items():
@@ -125,38 +125,36 @@ class IxiaHandler(object):
         """
         :type context: cloudshell.shell.core.driver_context.ResourceRemoteCommandContext
         """
-
-        self.ixn.start_devices()
+        self.ixn.protocols_start()
 
     def stop_devices(self, context):
         """
         :type context: cloudshell.shell.core.driver_context.ResourceRemoteCommandContext
         """
 
-        self.ixn.stop_devices()
+        self.ixn.protocols_stop()
 
     def start_traffic(self, context,blocking):
         """
         :type context: cloudshell.shell.core.driver_context.ResourceRemoteCommandContext
         """
         blocking = bool(blocking) if blocking in ["true", "True"] else False
-        self.ixn.start_traffic(blocking)
+        self.ixn.traffic_apply()
+        self.ixn.l23_traffic_start()
 
     def stop_traffic(self, context):
         """
         :type context: cloudshell.shell.core.driver_context.ResourceRemoteCommandContext
         """
 
-        self.ixn.stop_traffic()
+        self.ixn.l23_traffic_stop()
 
 
     def get_statistics(self, context, view_name,name_caption, output_type):
         output_file = output_type.lower().strip()
         if output_file != 'json' and output_file != 'csv':
             raise Exception("The output format should be json or csv")
-        gen_stats = IxnStatisticsView(view_name,name_caption)
-        gen_stats.read_stats()
-        statistics = gen_stats.statistics
+        statistics = self.ixn.getStatistics(view_name)
         reservation_id = context.reservation.reservation_id
         my_api = self.get_api(context)
         if output_file.lower() == 'json':
