@@ -23,7 +23,7 @@
                  <source>src</source>
             </sources>
             <!-- the driver name of the driver to update -->
-            <targetName>TestCenterControllerDriver</targetName>
+            <targetName>IxiaControllerDriver</targetName>
         </driver>
     </drivers>
 

@@ -4,7 +4,7 @@
     </ShellAttributes>
 
     <ShellModel Family="Traffic Generator Controller">
-        <ResourceModel Name="IXIA Controller" Description="IXIA controller" SupportsConcurrentCommands="true">
+        <ResourceModel Name="Ixia Controller" Description="Ixia controller" SupportsConcurrentCommands="true">
 			<AttachedAttributes>
 
         		<AttachedAttribute Name="Client Install Path" IsOverridable="true" IsLocal="true">
@@ -15,7 +15,7 @@
           		</AttachedAttribute>
 			</AttachedAttributes>
             <Drivers>
-                <DriverName>IXIAControllerDriver</DriverName>
+                <DriverName>IxiaControllerDriver</DriverName>
             </Drivers>			
         </ResourceModel>
     </ShellModel>

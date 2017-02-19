@@ -23,7 +23,7 @@
   	</ResourceFamilies>
  
   <DriverDescriptors>
-      <DriverDescriptor Name="IXIAControllerDriver" DriverType="PythonDriver" />
+      <DriverDescriptor Name="IxiaControllerDriver" DriverType="PythonDriver" />
   </DriverDescriptors>
 
 </DataModelInfo>

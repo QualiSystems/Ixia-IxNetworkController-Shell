@@ -2,7 +2,7 @@ from cloudshell.shell.core.resource_driver_interface import ResourceDriverInterf
 from ixia_handler import IxiaHandler
 from cloudshell.shell.core.context_utils import get_resource_name
 
-class IXIAControllerDriver(ResourceDriverInterface):
+class IxiaControllerDriver(ResourceDriverInterface):
 
     def __init__(self):
         self.handler = IxiaHandler()
@@ -24,21 +24,20 @@ class IXIAControllerDriver(ResourceDriverInterface):
 
         return self.handler.get_inventory(context)
 
-    def load_config(self, context, stc_config_file_name, get_data_from_config):
+    def load_config(self, context, ixia_config_file_name):
         """ Load STC configuration file and reserve ports.
         :param context: the context the command runs on
         :type context: cloudshell.shell.core.driver_context.ResourceRemoteCommandContext
-        :param stc_config_file_name: full path to STC configuration file (tcc or xml)
         :param get_data_from_config: True - reserve physical ports saved in the configuration file
                                      False - reserve physical ports from sandbox.
         """
-        '''
+
         my_api = self.handler.get_api(context)
         reservation_id = context.reservation.reservation_id
         resource_name = get_resource_name(context=context)
         my_api.EnqueueCommand(reservationId=reservation_id,targetName=resource_name,commandName="keep_alive", targetType="Resource")
-        '''
-        self.handler.load_config(context, stc_config_file_name, get_data_from_config)
+
+        self.handler.load_config(context, ixia_config_file_name)
         return ""
 
     def send_arp(self, context):
@@ -83,8 +82,8 @@ class IXIAControllerDriver(ResourceDriverInterface):
 
         self.handler.stop_traffic()
 
-    def get_statistics(self, context, view_name, output_type):
-        self.handler.get_statistics(context, view_name, output_type)
+    def get_statistics(self, context, view_name,name_caption, output_type):
+        self.handler.get_statistics(context, view_name, name_caption,output_type)
         return ""
 
     def cleanup(self):

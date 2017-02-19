@@ -4,7 +4,7 @@ from cloudshell.shell.core.driver_context import AutoLoadDetails
 from trafficgenerator.tgn_tcl import TgnTkMultithread
 from ixnetwork.ixn_app import IxnApp
 from ixnetwork.api.ixn_tcl import IxnTclWrapper
-from ixnetwork.ixn_statistics_view import IxnStatisticsView
+from ixnetwork.ixn_statistics_view import IxnStatisticsView,IxnFlowStatistics
 
 
 import re
@@ -61,57 +61,55 @@ class IxiaHandler(object):
 
         return CloudShellSessionContext(context).get_api()
 
-    def load_config(self, context, stc_config_file_name, get_data_from_config=False):
+    def load_config(self, context, ixia_config_file_name):
         """
         :param str stc_config_file_name: full path to STC configuration file (tcc or xml)
         :param context: the context the command runs on
         :type context: cloudshell.shell.core.driver_context.ResourceRemoteCommandContext
         """
 
-        self.ixn.load_config(stc_config_file_name)
+        self.ixn.load_config(ixia_config_file_name)
         self.ports = self.ixn.root.get_ports()
 
-        if get_data_from_config.lower() == 'false':
-            reservation_id = context.reservation.reservation_id
-            my_api = self.get_api(context)
-            response = my_api.GetReservationDetails(reservationId=reservation_id)
+        reservation_id = context.reservation.reservation_id
+        my_api = self.get_api(context)
+        response = my_api.GetReservationDetails(reservationId=reservation_id)
 
-            search_chassis = "Ixia Chassis"
-            search_port = "Port"
-            chassis_obj = None
-            ports_obj = []
+        search_chassis = "Ixia Chassis"
+        search_port = "Port"
+        chassis_objs_dict = dict()
+        ports_obj = []
 
-            for resource in response.ReservationDescription.Resources:
-                if resource.ResourceModelName == search_chassis:
-                    chassis_obj = resource
-                if resource.ResourceFamilyName == search_port:
+        for resource in response.ReservationDescription.Resources:
+            if resource.ResourceFamilyName == search_chassis:
+                chassis_objs_dict[resource.FullAddress] = {'chassis': resource, 'ports': list()}
+        for resource in response.ReservationDescription.Resources:
+            if resource.ResourceFamilyName == search_port:
+                chassis_adr = resource.FullAddress.split('/')[0]
+                if chassis_adr in chassis_objs_dict:
+                    chassis_objs_dict[chassis_adr]['ports'].append(resource)
                     ports_obj.append(resource)
 
-            ports_obj_dict = dict()
-            for port in ports_obj:
-                if (chassis_obj.FullAddress in port.FullAddress):
-                    val = my_api.GetAttributeValue(resourceFullPath=port.Name, attributeName="Logical Name").Value
-                    if val:
-                        port.logic_name = val
-                        ports_obj_dict[val.lower().strip()] = port
-            if not ports_obj_dict:
-                self.logger.error("You should add logical name for ports")
-                raise Exception("You should add logical name for ports")
+        ports_obj_dict = dict()
+        for port in ports_obj:
+            val = my_api.GetAttributeValue(resourceFullPath=port.Name, attributeName="Logical Name").Value
+            if val:
+                port.logic_name = val
+                ports_obj_dict[val.lower().strip()] = port
+        if not ports_obj_dict:
+            self.logger.error("You should add logical name for ports")
+            raise Exception("You should add logical name for ports")
 
-            for port_name, port in self.ports.items():
-                # 'physical location in the form ip/module/port'
-                port_name = port_name.lower().strip()
-                if port_name in ports_obj_dict:
-                    FullAddress = re.sub(r'PG.*?[^a-zA-Z0-9 ]', r'', ports_obj_dict[port_name].FullAddress)
-                    physical_add = re.sub(r'[^./0-9 ]', r'', FullAddress)
-                    self.logger.info("Logical Port %s will be reserved now on Physical location %s" %
-                                     (str(port_name), str(physical_add)))
-                    port.reserve(physical_add,force=True,wait_for_up=False)
+        for port_name, port in self.ports.items():
+            # 'physical location in the form ip/module/port'
+            port_name = port_name.lower().strip()
+            if port_name in ports_obj_dict:
+                FullAddress = re.sub(r'PG.*?[^a-zA-Z0-9 ]', r'', ports_obj_dict[port_name].FullAddress)
+                physical_add = re.sub(r'[^./0-9 ]', r'', FullAddress)
+                self.logger.info("Logical Port %s will be reserved now on Physical location %s" %
+                                 (str(port_name), str(physical_add)))
+                port.reserve(physical_add, force=True, wait_for_up=False)
 
-        else:
-            for port_name, port in self.ports.items():
-                # 'physical location in the form ip/module/port'
-                port.reserve(force=True)
 
         self.logger.info("Port Reservation Completed")
 
@@ -140,9 +138,9 @@ class IxiaHandler(object):
         """
         blocking = bool(blocking) if blocking in ["true", "True"] else False
         self.ixn.traffic_apply()
-        self.ixn.l23_traffic_start()
+        self.ixn.l23_traffic_start(blocking)
 
-    def stop_traffic(self, context):
+    def stop_traffic(self):
         """
         :type context: cloudshell.shell.core.driver_context.ResourceRemoteCommandContext
         """
@@ -150,11 +148,17 @@ class IxiaHandler(object):
         self.ixn.l23_traffic_stop()
 
 
-    def get_statistics(self, context, view_name,name_caption, output_type):
+    def get_statistics(self, context, view_name, output_type):
         output_file = output_type.lower().strip()
         if output_file != 'json' and output_file != 'csv':
             raise Exception("The output format should be json or csv")
-        statistics = self.ixn.getStatistics(view_name)
+
+
+        if view_name == 'Flow Statistics':
+            stats_obj = IxnFlowStatistics()
+        else:
+            stats_obj = IxnStatisticsView(view_name)
+        statistics = stats_obj.read_stats()
         reservation_id = context.reservation.reservation_id
         my_api = self.get_api(context)
         if output_file.lower() == 'json':

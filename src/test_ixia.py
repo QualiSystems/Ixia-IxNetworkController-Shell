@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from cloudshell.shell.core.context import ResourceCommandContext, ResourceContextDetails, ReservationContextDetails,ConnectivityContext
-from driver import IXIAControllerDriver
+from driver import IxiaControllerDriver
 import thread
 
 
@@ -19,7 +19,7 @@ def create_context():
     context.reservation.domain = 'Global'
     context.resource.attributes = {}
     context.resource.attributes['Client Install Path'] = 'C:/Program Files (x86)/Ixia/IxNetwork/8.01-GA'
-    context.resource.address = 'localhost'
+    context.resource.address = '192.168.42.61'
     return context
 
 
@@ -100,7 +100,7 @@ if __name__ == '__main__':
     import time
     import threading
     context = create_context()
-    driver = IXIAControllerDriver()
+    driver = IxiaControllerDriver()
 
     #response = driver.get_inventory(context)
     #res = driver.save(context, 'tftp://82.80.35.226/test', 'startup')
@@ -127,16 +127,16 @@ if __name__ == '__main__':
 
     response = driver.load_config(context,"C:\\Program Files (x86)\\configs\\test_config.ixncfg","False")
     print "1"
-    response = driver.start_devices(context)
-    print "2"
-    driver.start_traffic(context)
-    print "5"
     response = driver.send_arp(context)
     print "3"
-    response = driver.send_arp(context)
-    print "4"
+    response = driver.start_devices(context)
+    print "2"
+    driver.start_traffic(context,"False")
+    print "5"
+    driver.stop_traffic(context)
 
-    driver.get_statistics(context,'generatorportresults', "json")
+
+    driver.get_statistics(context,'Port Statistics',"json")
     print "5"
     #print response
     #res=driver.update_firmware(context,'1.1.1.1','flash:/config_backup/')
