@@ -82,8 +82,8 @@ class IxiaControllerDriver(ResourceDriverInterface):
 
         self.handler.stop_traffic()
 
-    def get_statistics(self, context, view_name,name_caption, output_type):
-        self.handler.get_statistics(context, view_name, name_caption,output_type)
+    def get_statistics(self, context, view_name,output_type):
+        self.handler.get_statistics(context, view_name, output_type)
         return ""
 
     def cleanup(self):
