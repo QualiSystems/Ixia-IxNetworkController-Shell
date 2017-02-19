@@ -11,7 +11,7 @@ def create_context():
     context.resource = ResourceContextDetails()
     context.resource.name = 'TestCenter Controller 1'
     context.reservation = ReservationContextDetails()
-    context.reservation.reservation_id = 'f2f985d3-275f-4789-b0ea-acb494b999ef'
+    context.reservation.reservation_id = '91a15a37-7ffd-4846-a5d2-ccb16da184da'
     context.reservation.owner_user = 'admin'
     context.reservation.owner_email = 'fake@qualisystems.com'
     context.reservation.environment_path ='config1'
@@ -19,7 +19,7 @@ def create_context():
     context.reservation.domain = 'Global'
     context.resource.attributes = {}
     context.resource.attributes['Client Install Path'] = 'C:/Program Files (x86)/Ixia/IxNetwork/8.01-GA'
-    context.resource.address = '192.168.42.61'
+    context.resource.address = 'localhost'
     return context
 
 
@@ -125,7 +125,7 @@ if __name__ == '__main__':
 
 
 
-    response = driver.load_config(context,"C:\\Program Files (x86)\\configs\\test_config.ixncfg","False")
+    response = driver.load_config(context,"C:\\Program Files (x86)\\configs\\test_config.ixncfg")
     print "1"
     response = driver.send_arp(context)
     print "3"
