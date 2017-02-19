@@ -9,9 +9,9 @@ import thread
 def create_context():
     context = ResourceCommandContext()
     context.resource = ResourceContextDetails()
-    context.resource.name = 'TestCenter Controller 1'
+    context.resource.name = 'Ixia Controller'
     context.reservation = ReservationContextDetails()
-    context.reservation.reservation_id = '91a15a37-7ffd-4846-a5d2-ccb16da184da'
+    context.reservation.reservation_id = '0a2bf55f-cf68-4a92-8bfd-1bd60d7d1202'
     context.reservation.owner_user = 'admin'
     context.reservation.owner_email = 'fake@qualisystems.com'
     context.reservation.environment_path ='config1'
@@ -129,6 +129,8 @@ if __name__ == '__main__':
     print "1"
     response = driver.send_arp(context)
     print "3"
+    driver.get_statistics(context,'Port Statistics',"json")
+    print "5"
     response = driver.start_devices(context)
     print "2"
     driver.start_traffic(context,"False")
@@ -136,8 +138,7 @@ if __name__ == '__main__':
     driver.stop_traffic(context)
 
 
-    driver.get_statistics(context,'Port Statistics',"json")
-    print "5"
+
     #print response
     #res=driver.update_firmware(context,'1.1.1.1','flash:/config_backup/')
     #print driver.send_custom_command(context, "display version")

@@ -81,7 +81,7 @@ class IxiaHandler(object):
         ports_obj = []
 
         for resource in response.ReservationDescription.Resources:
-            if resource.ResourceFamilyName == search_chassis:
+            if resource.ResourceModelName == search_chassis:
                 chassis_objs_dict[resource.FullAddress] = {'chassis': resource, 'ports': list()}
         for resource in response.ReservationDescription.Resources:
             if resource.ResourceFamilyName == search_port:
@@ -158,7 +158,8 @@ class IxiaHandler(object):
             stats_obj = IxnFlowStatistics()
         else:
             stats_obj = IxnStatisticsView(view_name)
-        statistics = stats_obj.read_stats()
+        stats_obj.read_stats()
+        statistics = stats_obj.statistics
         reservation_id = context.reservation.reservation_id
         my_api = self.get_api(context)
         if output_file.lower() == 'json':
