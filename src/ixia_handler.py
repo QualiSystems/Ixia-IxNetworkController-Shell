@@ -40,7 +40,7 @@ class IxiaHandler(object):
         if address.lower() in ('na', 'localhost'):
             address = None
         self.logger.info("connecting to address {}".format(address))
-        self.ixn.connect()
+        self.ixn.connect(tcl_server=address)
 
     def tearDown(self):
         self.tcl_interp.stop()
