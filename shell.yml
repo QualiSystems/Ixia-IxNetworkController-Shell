@@ -1,0 +1,7 @@
+shell:
+    name: Ixia
+    author: ''
+    email: ''
+    description: Ixia
+    version: 1.0.0
+    driver_name: IxiaControllerDriver
