@@ -1,18 +1,16 @@
-import logging
-from cloudshell.shell.core.session.cloudshell_session import CloudShellSessionContext
-from cloudshell.shell.core.driver_context import AutoLoadDetails
-from trafficgenerator.tgn_tcl import TgnTkMultithread
-from ixnetwork.ixn_app import IxnApp
-from ixnetwork.api.ixn_tcl import IxnTclWrapper
-from ixnetwork.ixn_statistics_view import IxnStatisticsView,IxnFlowStatistics
-
 
 import re
 import json
 import csv
 import io
+import logging
 
-import os
+from cloudshell.shell.core.session.cloudshell_session import CloudShellSessionContext
+from cloudshell.shell.core.driver_context import AutoLoadDetails
+from trafficgenerator.tgn_tcl import TgnTkMultithread
+from ixnetwork.ixn_app import IxnApp
+from ixnetwork.api.ixn_tcl import IxnTclWrapper
+from ixnetwork.ixn_statistics_view import IxnStatisticsView, IxnFlowStatistics
 
 
 class IxiaHandler(object):
@@ -21,11 +19,10 @@ class IxiaHandler(object):
         """
         :type context: cloudshell.shell.core.driver_context.InitCommandContext
         """
-        curr_dir = os.getcwd()
-        log_dir = curr_dir+'/Logs'
-        log_file = 'Ixia_logger.log'
+
+        log_file = 'ixnetwork_controller_logger.txt'
         client_install_path = context.resource.attributes['Client Install Path']
-        logging.basicConfig(filename= log_file, level=logging.DEBUG)
+        logging.basicConfig(filename=log_file, level=logging.DEBUG)
         self.logger = logging.getLogger('root')
         self.logger.addHandler(logging.FileHandler(log_file))
         self.logger.setLevel('DEBUG')
@@ -36,11 +33,14 @@ class IxiaHandler(object):
 
         self.ixn = IxnApp(self.logger, api_wrapper)
 
-        address = context.resource.address
-        if address.lower() in ('na', 'localhost'):
-            address = None
-        self.logger.info("connecting to address {}".format(address))
-        self.ixn.connect(tcl_server=address)
+        tcl_server = context.resource.address
+        if tcl_server.lower() in ('na', ''):
+            tcl_server = 'localhost'
+        tcl_port = context.resource.attributes['Controller TCP Port']
+        if not tcl_port:
+            tcl_port = 8009
+        self.logger.info("connecting to tcl server at {} port".format(tcl_server, tcl_port))
+        self.ixn.connect(tcl_server=tcl_server, tcl_port=tcl_port)
 
     def tearDown(self):
         self.tcl_interp.stop()
@@ -110,7 +110,6 @@ class IxiaHandler(object):
                                  (str(port_name), str(physical_add)))
                 port.reserve(physical_add, force=True, wait_for_up=False)
 
-
         self.logger.info("Port Reservation Completed")
 
     def send_arp(self, context):
@@ -132,7 +131,7 @@ class IxiaHandler(object):
 
         self.ixn.protocols_stop()
 
-    def start_traffic(self, context,blocking):
+    def start_traffic(self, context, blocking):
         """
         :type context: cloudshell.shell.core.driver_context.ResourceRemoteCommandContext
         """
@@ -147,12 +146,10 @@ class IxiaHandler(object):
 
         self.ixn.l23_traffic_stop()
 
-
     def get_statistics(self, context, view_name, output_type):
         output_file = output_type.lower().strip()
         if output_file != 'json' and output_file != 'csv':
             raise Exception("The output format should be json or csv")
-
 
         if view_name == 'Flow Statistics':
             stats_obj = IxnFlowStatistics()
@@ -163,7 +160,7 @@ class IxiaHandler(object):
         reservation_id = context.reservation.reservation_id
         my_api = self.get_api(context)
         if output_file.lower() == 'json':
-            statistics = json.dumps(statistics, indent=4, sort_keys=True,ensure_ascii=False)
+            statistics = json.dumps(statistics, indent=4, sort_keys=True, ensure_ascii=False)
             # print statistics
             my_api.WriteMessageToReservationOutput(reservation_id, statistics)
         elif output_file.lower() == 'csv':
@@ -172,6 +169,4 @@ class IxiaHandler(object):
             w.writeheader()
             w.writerow(statistics)
 
-            my_api.WriteMessageToReservationOutput(reservation_id,output.getvalue().strip('\r\n'))
-
-
+            my_api.WriteMessageToReservationOutput(reservation_id, output.getvalue().strip('\r\n'))

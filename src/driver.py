@@ -1,6 +1,8 @@
+
 from cloudshell.shell.core.resource_driver_interface import ResourceDriverInterface
 from ixia_handler import IxiaHandler
 from cloudshell.shell.core.context_utils import get_resource_name
+
 
 class IxiaControllerDriver(ResourceDriverInterface):
 
@@ -35,7 +37,8 @@ class IxiaControllerDriver(ResourceDriverInterface):
         my_api = self.handler.get_api(context)
         reservation_id = context.reservation.reservation_id
         resource_name = get_resource_name(context=context)
-        my_api.EnqueueCommand(reservationId=reservation_id,targetName=resource_name,commandName="keep_alive", targetType="Resource")
+        my_api.EnqueueCommand(reservationId=reservation_id, targetName=resource_name, commandName="keep_alive",
+                              targetType="Resource")
 
         self.handler.load_config(context, ixia_config_file_name)
         return ""
@@ -66,13 +69,13 @@ class IxiaControllerDriver(ResourceDriverInterface):
 
         self.handler.stop_devices(context)
 
-    def start_traffic(self, context,blocking):
+    def start_traffic(self, context, blocking):
         """
         :param context: the context the command runs on
         :type context: cloudshell.shell.core.driver_context.ResourceRemoteCommandContext
         """
 
-        self.handler.start_traffic(context,blocking)
+        self.handler.start_traffic(context, blocking)
 
     def stop_traffic(self, context):
         """
@@ -82,7 +85,7 @@ class IxiaControllerDriver(ResourceDriverInterface):
 
         self.handler.stop_traffic()
 
-    def get_statistics(self, context, view_name,output_type):
+    def get_statistics(self, context, view_name, output_type):
         self.handler.get_statistics(context, view_name, output_type)
         return ""
 
@@ -90,14 +93,9 @@ class IxiaControllerDriver(ResourceDriverInterface):
         self.handler.tearDown()
         pass
 
-
     def keep_alive(self, context, cancellation_context):
 
         while not cancellation_context.is_cancelled:
             pass
         if cancellation_context.is_cancelled:
             self.handler.tearDown()
-
-
-
-
