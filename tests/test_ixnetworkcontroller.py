@@ -56,6 +56,7 @@ class TestIxNetworkControllerDriver(unittest.TestCase):
 
     def test_auto_load(self):
         self.driver.get_inventory(None)
+        pass
 
     def test_load_config(self):
         self.driver.load_config(self.context, 'test_config.ixncfg')

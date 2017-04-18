@@ -89,6 +89,14 @@ class IxiaControllerDriver(ResourceDriverInterface):
         self.handler.get_statistics(context, view_name, output_type)
         return ""
 
+    def run_quick_test(self, context, test):
+        """
+        :param context: the context the command runs on
+        :type context: cloudshell.shell.core.driver_context.ResourceRemoteCommandContext
+        """
+
+        self.handler.run_quick_test(context, test)
+
     def cleanup(self):
         self.handler.tearDown()
         pass

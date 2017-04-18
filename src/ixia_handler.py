@@ -21,16 +21,15 @@ class IxiaHandler(object):
         """
 
         log_file = 'ixnetwork_controller_logger.txt'
-        client_install_path = context.resource.attributes['Client Install Path']
-        logging.basicConfig(filename=log_file, level=logging.DEBUG)
         self.logger = logging.getLogger('root')
         self.logger.addHandler(logging.FileHandler(log_file))
-        self.logger.setLevel('DEBUG')
+        self.logger.setLevel(logging.DEBUG)
 
         self.tcl_interp = TgnTkMultithread()
         self.tcl_interp.start()
+        client_install_path = context.resource.attributes['Client Install Path']
+        self.logger.debug('client_install_path = ' + client_install_path)
         api_wrapper = IxnTclWrapper(self.logger, client_install_path, self.tcl_interp)
-
         self.ixn = IxnApp(self.logger, api_wrapper)
 
         tcl_server = context.resource.address
@@ -170,3 +169,13 @@ class IxiaHandler(object):
             w.writerow(statistics)
 
             my_api.WriteMessageToReservationOutput(reservation_id, output.getvalue().strip('\r\n'))
+
+    def run_quick_test(self, context, test):
+        """
+        :type context: cloudshell.shell.core.driver_context.ResourceRemoteCommandContext
+        """
+        self.ixn.quick_test_apply(test)
+        result = self.ixn.quick_test_start(test, blocking=True)
+        my_api = self.get_api(context)
+        reservation_id = context.reservation.reservation_id
+        my_api.WriteMessageToReservationOutput(reservation_id, 'result = ' + result)
