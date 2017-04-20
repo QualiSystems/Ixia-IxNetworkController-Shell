@@ -6,37 +6,34 @@ import unittest
 
 from cloudshell.shell.core.context import (ResourceCommandContext, ResourceContextDetails, ReservationContextDetails,
                                            ConnectivityContext)
+from cloudshell.api.cloudshell_api import CloudShellAPISession
 from src.driver import IxiaControllerDriver
 
-controller = 'NA'
+controller = 'localhost'
 port = ''
 install_path = 'C:/Program Files (x86)/Ixia/IxNetwork/8.01-GA'
 
-reservation_id = '87952f34-09a2-4011-838c-ea10a4a4740a'
-admin_auth_token = ''
 
-
-def create_context():
+def create_context(session):
     context = ResourceCommandContext()
 
     context.connectivity = ConnectivityContext()
     context.connectivity.server_address = 'localhost'
-    context.connectivity.admin_auth_token = admin_auth_token
+    context.connectivity.admin_auth_token = session.token_id
+
+    response = session.CreateImmediateTopologyReservation('ixn unittest', 'admin', 60, False, False, 0, 'ixn test',
+                                                          [], [], [])
 
     context.resource = ResourceContextDetails()
     context.resource.name = 'IxNetwork Controller'
-
-    context.reservation = ReservationContextDetails()
-    context.reservation.reservation_id = reservation_id
-    context.reservation.owner_user = 'admin'
-    context.reservation.owner_email = 'fake@qualisystems.com'
-    context.reservation.environment_path = 'config1'
-    context.reservation.environment_name = 'config1'
-    context.reservation.domain = 'Global'
-
     context.resource.address = controller
     context.resource.attributes = {'Client Install Path': install_path,
                                    'Controller TCP Port': port}
+
+    context.reservation = ReservationContextDetails()
+    context.reservation.reservation_id = response.Reservation.Id
+    context.reservation.owner_user = response.Reservation.Owner
+    context.reservation.domain = response.Reservation.DomainName
 
     return context
 
@@ -44,18 +41,17 @@ def create_context():
 class TestIxNetworkControllerDriver(unittest.TestCase):
 
     def setUp(self):
-        self.context = create_context()
+        self.session = CloudShellAPISession('localhost', 'admin', 'admin', 'Global')
+        self.context = create_context(self.session)
         self.driver = IxiaControllerDriver()
         self.driver.initialize(self.context)
 
     def tearDown(self):
         self.driver.cleanup()
+        self.session.EndReservation(self.context.reservation.reservation_id)
+        self.session.TerminateReservation(self.context.reservation.reservation_id)
 
     def test_init(self):
-        pass
-
-    def test_auto_load(self):
-        self.driver.get_inventory(None)
         pass
 
     def test_load_config(self):

@@ -1,5 +1,4 @@
 
-import re
 import json
 import csv
 import io
@@ -38,7 +37,7 @@ class IxiaHandler(object):
         tcl_port = context.resource.attributes['Controller TCP Port']
         if not tcl_port:
             tcl_port = 8009
-        self.logger.info("connecting to tcl server at {} port".format(tcl_server, tcl_port))
+        self.logger.debug("connecting to tcl server {} at {} port".format(tcl_server, tcl_port))
         self.ixn.connect(tcl_server=tcl_server, tcl_port=tcl_port)
 
     def tearDown(self):
@@ -68,46 +67,29 @@ class IxiaHandler(object):
         """
 
         self.ixn.load_config(ixia_config_file_name)
-        self.ports = self.ixn.root.get_ports()
+        self.config_ports = self.ixn.root.get_ports()
 
         reservation_id = context.reservation.reservation_id
         my_api = self.get_api(context)
         response = my_api.GetReservationDetails(reservationId=reservation_id)
 
-        search_chassis = "Ixia Chassis"
-        search_port = "Port"
-        chassis_objs_dict = dict()
-        ports_obj = []
-
+        # The following logic assumes that all TG ports are IxNetwork ports.
+        reservation_ports = dict()
         for resource in response.ReservationDescription.Resources:
-            if resource.ResourceModelName == search_chassis:
-                chassis_objs_dict[resource.FullAddress] = {'chassis': resource, 'ports': list()}
-        for resource in response.ReservationDescription.Resources:
-            if resource.ResourceFamilyName == search_port:
-                chassis_adr = resource.FullAddress.split('/')[0]
-                if chassis_adr in chassis_objs_dict:
-                    chassis_objs_dict[chassis_adr]['ports'].append(resource)
-                    ports_obj.append(resource)
+            if resource.ResourceModelName == 'Generic Traffic Generator Port':
+                name = my_api.GetAttributeValue(resourceFullPath=resource.Name, attributeName="Logical Name").Value
+                reservation_ports[name] = resource
 
-        ports_obj_dict = dict()
-        for port in ports_obj:
-            val = my_api.GetAttributeValue(resourceFullPath=port.Name, attributeName="Logical Name").Value
-            if val:
-                port.logic_name = val
-                ports_obj_dict[val.lower().strip()] = port
-        if not ports_obj_dict:
-            self.logger.error("You should add logical name for ports")
-            raise Exception("You should add logical name for ports")
-
-        for port_name, port in self.ports.items():
-            # 'physical location in the form ip/module/port'
-            port_name = port_name.lower().strip()
-            if port_name in ports_obj_dict:
-                FullAddress = re.sub(r'PG.*?[^a-zA-Z0-9 ]', r'', ports_obj_dict[port_name].FullAddress)
-                physical_add = re.sub(r'[^./0-9 ]', r'', FullAddress)
-                self.logger.info("Logical Port %s will be reserved now on Physical location %s" %
-                                 (str(port_name), str(physical_add)))
-                port.reserve(physical_add, force=True, wait_for_up=False)
+        for name, port in self.config_ports.items():
+            if name in reservation_ports:
+                address = reservation_ports[name].FullAddress
+                self.logger.debug('Logical Port {} will be reserved Physical location {}'.format(name, address))
+                port.reserve(address, force=True, wait_for_up=False)
+            else:
+                self.logger.error('Configuration port "{}" not found in reservation ports {}'.
+                                  format(port, reservation_ports.keys()))
+                raise Exception('Configuration port "{}" not found in reservation ports {}'.
+                                format(port, reservation_ports.keys()))
 
         self.logger.info("Port Reservation Completed")
 
@@ -117,13 +99,13 @@ class IxiaHandler(object):
         """
         self.ixn.send_arp_ns()
 
-    def start_devices(self, context):
+    def start_protocols(self, context):
         """
         :type context: cloudshell.shell.core.driver_context.ResourceRemoteCommandContext
         """
         self.ixn.protocols_start()
 
-    def stop_devices(self, context):
+    def stop_protocos(self, context):
         """
         :type context: cloudshell.shell.core.driver_context.ResourceRemoteCommandContext
         """

@@ -52,22 +52,22 @@ class IxiaControllerDriver(ResourceDriverInterface):
         self.handler.send_arp(context)
         return ""
 
-    def start_devices(self, context):
+    def start_protocols(self, context):
         """
         :param context: the context the command runs on
         :type context: cloudshell.shell.core.driver_context.ResourceRemoteCommandContext
         """
 
-        self.handler.start_devices(context)
+        self.handler.start_protocols(context)
         return ""
 
-    def stop_devices(self, context):
+    def stop_protocols(self, context):
         """
         :param context: the context the command runs on
         :type context: cloudshell.shell.core.driver_context.ResourceRemoteCommandContext
         """
 
-        self.handler.stop_devices(context)
+        self.handler.stop_protocols(context)
 
     def start_traffic(self, context, blocking):
         """
