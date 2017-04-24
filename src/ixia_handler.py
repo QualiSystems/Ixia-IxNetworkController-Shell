@@ -12,6 +12,19 @@ from ixnetwork.api.ixn_tcl import IxnTclWrapper
 from ixnetwork.ixn_statistics_view import IxnStatisticsView, IxnFlowStatistics
 
 
+def get_reservation_ports(session, reservation_id):
+    """ Get all Generic Traffic Generator Port in reservation.
+
+    :return: list of all Generic Traffic Generator Port resource objects in reservation
+    """
+    reservation_ports = []
+    reservation = session.GetReservationDetails(reservation_id).ReservationDescription
+    for resource in reservation.Resources:
+        if resource.ResourceModelName == 'Generic Traffic Generator Port':
+            reservation_ports.append(resource)
+    return reservation_ports
+
+
 class IxiaHandler(object):
 
     def initialize(self, context):
@@ -71,14 +84,10 @@ class IxiaHandler(object):
 
         reservation_id = context.reservation.reservation_id
         my_api = self.get_api(context)
-        response = my_api.GetReservationDetails(reservationId=reservation_id)
 
-        # The following logic assumes that all TG ports are IxNetwork ports.
-        reservation_ports = dict()
-        for resource in response.ReservationDescription.Resources:
-            if resource.ResourceModelName == 'Generic Traffic Generator Port':
-                name = my_api.GetAttributeValue(resourceFullPath=resource.Name, attributeName="Logical Name").Value
-                reservation_ports[name] = resource
+        reservation_ports = {}
+        for port in get_reservation_ports(my_api, reservation_id):
+            reservation_ports[my_api.GetAttributeValue(port.Name, 'Logical Name').Value.strip()] = port
 
         for name, port in self.config_ports.items():
             if name in reservation_ports:
@@ -129,13 +138,12 @@ class IxiaHandler(object):
 
     def get_statistics(self, context, view_name, output_type):
         output_file = output_type.lower().strip()
-        if output_file != 'json' and output_file != 'csv':
-            raise Exception("The output format should be json or csv")
 
         if view_name == 'Flow Statistics':
             stats_obj = IxnFlowStatistics()
         else:
             stats_obj = IxnStatisticsView(view_name)
+
         stats_obj.read_stats()
         statistics = stats_obj.statistics
         reservation_id = context.reservation.reservation_id
@@ -144,13 +152,16 @@ class IxiaHandler(object):
             statistics = json.dumps(statistics, indent=4, sort_keys=True, ensure_ascii=False)
             # print statistics
             my_api.WriteMessageToReservationOutput(reservation_id, statistics)
+            return statistics
         elif output_file.lower() == 'csv':
             output = io.BytesIO()
             w = csv.DictWriter(output, statistics.keys())
             w.writeheader()
             w.writerow(statistics)
-
             my_api.WriteMessageToReservationOutput(reservation_id, output.getvalue().strip('\r\n'))
+            return output.getvalue().strip('\r\n')
+        else:
+            raise Exception('Output type should be CSV/JSON')
 
     def run_quick_test(self, context, test):
         """

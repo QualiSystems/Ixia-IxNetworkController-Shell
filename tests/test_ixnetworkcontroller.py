@@ -8,6 +8,7 @@ from cloudshell.shell.core.context import (ResourceCommandContext, ResourceConte
                                            ConnectivityContext)
 from cloudshell.api.cloudshell_api import CloudShellAPISession
 from src.driver import IxiaControllerDriver
+from src.ixia_handler import get_reservation_ports
 
 controller = 'localhost'
 port = ''
@@ -55,7 +56,28 @@ class TestIxNetworkControllerDriver(unittest.TestCase):
         pass
 
     def test_load_config(self):
+        reservation_ports = get_reservation_ports(self.session, self.context.reservation.reservation_id)
+        self.session.SetAttributeValue(reservation_ports[0].Name, 'Logical Name', 'Port 1')
+        self.session.SetAttributeValue(reservation_ports[1].Name, 'Logical Name', ' Port 2 ')
         self.driver.load_config(self.context, 'test_config.ixncfg')
+
+    def run_traffic(self):
+        self.test_load_config()
+        self.driver.send_arp(self.context)
+        self.driver.start_traffic(self.context, True)
+        stats = self.driver.get_statistics(self.context, 'Port Statistics', 'JSON')
+        print stats
+
+    def negative_tests(self):
+        reservation_ports = get_reservation_ports(self.session, self.context.reservation.reservation_id)
+        assert(len(reservation_ports) == 2)
+        self.session.SetAttributeValue(reservation_ports[0].Name, 'Logical Name', 'Port 1')
+        self.session.SetAttributeValue(reservation_ports[1].Name, 'Logical Name', '')
+        self.assertRaises(Exception, self.driver.load_config, self.context, 'test_config.ixncfg')
+        self.session.SetAttributeValue(reservation_ports[1].Name, 'Logical Name', 'Port 1')
+        self.assertRaises(Exception, self.driver.load_config, self.context, 'test_config.ixncfg')
+        self.session.SetAttributeValue(reservation_ports[1].Name, 'Logical Name', 'Port x')
+        self.assertRaises(Exception, self.driver.load_config, self.context, 'test_config.ixncfg')
 
 if __name__ == '__main__':
     sys.exit(unittest.main())
