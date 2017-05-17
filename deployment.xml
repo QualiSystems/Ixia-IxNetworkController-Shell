@@ -23,7 +23,7 @@
                  <source>src</source>
             </sources>
             <!-- the driver name of the driver to update -->
-            <targetName>IxiaControllerDriver</targetName>
+            <targetName>IxNetworkControllerDriver</targetName>
         </driver>
     </drivers>
 

@@ -3,13 +3,14 @@ import json
 import csv
 import io
 import logging
+import time
 
 from cloudshell.shell.core.session.cloudshell_session import CloudShellSessionContext
-from cloudshell.shell.core.driver_context import AutoLoadDetails
 from trafficgenerator.tgn_tcl import TgnTkMultithread
 from ixnetwork.ixn_app import IxnApp
 from ixnetwork.api.ixn_tcl import IxnTclWrapper
 from ixnetwork.ixn_statistics_view import IxnStatisticsView, IxnFlowStatistics
+from helper.quali_rest_api_helper import create_quali_api_instance
 
 
 def get_reservation_ports(session, reservation_id):
@@ -17,6 +18,7 @@ def get_reservation_ports(session, reservation_id):
 
     :return: list of all Generic Traffic Generator Port resource objects in reservation
     """
+
     reservation_ports = []
     reservation = session.GetReservationDetails(reservation_id).ReservationDescription
     for resource in reservation.Resources:
@@ -27,27 +29,21 @@ def get_reservation_ports(session, reservation_id):
 
 class IxiaHandler(object):
 
-    def initialize(self, context):
-        """
-        :type context: cloudshell.shell.core.driver_context.InitCommandContext
-        """
+    def initialize(self, client_install_path, tcl_server, tcl_port):
 
-        log_file = 'ixnetwork_controller_logger.txt'
+        log_file = 'c:/temp/ixnetwork_controller_logger.txt'
         self.logger = logging.getLogger('root')
         self.logger.addHandler(logging.FileHandler(log_file))
         self.logger.setLevel(logging.DEBUG)
 
         self.tcl_interp = TgnTkMultithread()
         self.tcl_interp.start()
-        client_install_path = context.resource.attributes['Client Install Path']
         self.logger.debug('client_install_path = ' + client_install_path)
         api_wrapper = IxnTclWrapper(self.logger, client_install_path, self.tcl_interp)
         self.ixn = IxnApp(self.logger, api_wrapper)
 
-        tcl_server = context.resource.address
         if tcl_server.lower() in ('na', ''):
             tcl_server = 'localhost'
-        tcl_port = context.resource.attributes['Controller TCP Port']
         if not tcl_port:
             tcl_port = 8009
         self.logger.debug("connecting to tcl server {} at {} port".format(tcl_server, tcl_port))
@@ -56,28 +52,10 @@ class IxiaHandler(object):
     def tearDown(self):
         self.tcl_interp.stop()
 
-    def get_inventory(self, context):
-        """
-        :type context: cloudshell.shell.core.driver_context.ResourceRemoteCommandContext
-        """
-
-        return AutoLoadDetails([], [])
-
     def get_api(self, context):
-        """
-
-        :param context:
-        :return:
-        """
-
         return CloudShellSessionContext(context).get_api()
 
     def load_config(self, context, ixia_config_file_name):
-        """
-        :param str stc_config_file_name: full path to STC configuration file (tcc or xml)
-        :param context: the context the command runs on
-        :type context: cloudshell.shell.core.driver_context.ResourceRemoteCommandContext
-        """
 
         self.ixn.load_config(ixia_config_file_name)
         self.config_ports = self.ixn.root.get_ports()
@@ -102,38 +80,21 @@ class IxiaHandler(object):
 
         self.logger.info("Port Reservation Completed")
 
-    def send_arp(self, context):
-        """
-        :type context: cloudshell.shell.core.driver_context.ResourceRemoteCommandContext
-        """
+    def send_arp(self):
         self.ixn.send_arp_ns()
 
-    def start_protocols(self, context):
-        """
-        :type context: cloudshell.shell.core.driver_context.ResourceRemoteCommandContext
-        """
+    def start_protocols(self):
         self.ixn.protocols_start()
 
-    def stop_protocos(self, context):
-        """
-        :type context: cloudshell.shell.core.driver_context.ResourceRemoteCommandContext
-        """
-
+    def stop_protocos(self):
         self.ixn.protocols_stop()
 
-    def start_traffic(self, context, blocking):
-        """
-        :type context: cloudshell.shell.core.driver_context.ResourceRemoteCommandContext
-        """
+    def start_traffic(self, blocking):
         blocking = bool(blocking) if blocking in ["true", "True"] else False
         self.ixn.traffic_apply()
         self.ixn.l23_traffic_start(blocking)
 
     def stop_traffic(self):
-        """
-        :type context: cloudshell.shell.core.driver_context.ResourceRemoteCommandContext
-        """
-
         self.ixn.l23_traffic_stop()
 
     def get_statistics(self, context, view_name, output_type):
@@ -145,28 +106,32 @@ class IxiaHandler(object):
             stats_obj = IxnStatisticsView(view_name)
 
         stats_obj.read_stats()
-        statistics = stats_obj.statistics
+        statistics = stats_obj.get_all_stats()
         reservation_id = context.reservation.reservation_id
         my_api = self.get_api(context)
         if output_file.lower() == 'json':
-            statistics = json.dumps(statistics, indent=4, sort_keys=True, ensure_ascii=False)
-            # print statistics
-            my_api.WriteMessageToReservationOutput(reservation_id, statistics)
-            return statistics
+            statistics_str = json.dumps(statistics, indent=4, sort_keys=True, ensure_ascii=False)
+            return json.loads(statistics_str)
         elif output_file.lower() == 'csv':
             output = io.BytesIO()
-            w = csv.DictWriter(output, statistics.keys())
+            w = csv.DictWriter(output, stats_obj.captions)
             w.writeheader()
-            w.writerow(statistics)
-            my_api.WriteMessageToReservationOutput(reservation_id, output.getvalue().strip('\r\n'))
+            for obj_name in statistics:
+                w.writerow(statistics[obj_name])
+            quali_api_helper = create_quali_api_instance(context, self.logger)
+            quali_api_helper.login()
+            full_file_name = view_name.replace(' ', '_') + '_' + time.ctime().replace(' ', '_') + '.csv'
+            quali_api_helper.upload_file(context.reservation.reservation_id,
+                                         file_name=full_file_name,
+                                         file_stream=output.getvalue().strip())
+            my_api.WriteMessageToReservationOutput(reservation_id,
+                                                   'Statistics view saved in attached file - ' + full_file_name)
             return output.getvalue().strip('\r\n')
         else:
             raise Exception('Output type should be CSV/JSON')
 
     def run_quick_test(self, context, test):
-        """
-        :type context: cloudshell.shell.core.driver_context.ResourceRemoteCommandContext
-        """
+
         self.ixn.quick_test_apply(test)
         result = self.ixn.quick_test_start(test, blocking=True)
         my_api = self.get_api(context)

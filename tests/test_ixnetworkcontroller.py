@@ -7,12 +7,12 @@ import unittest
 from cloudshell.shell.core.context import (ResourceCommandContext, ResourceContextDetails, ReservationContextDetails,
                                            ConnectivityContext)
 from cloudshell.api.cloudshell_api import CloudShellAPISession
-from src.driver import IxiaControllerDriver
-from src.ixia_handler import get_reservation_ports
+from src.driver import IxNetworkControllerDriver
+from src.ixn_handler import get_reservation_ports
 
 controller = 'localhost'
 port = ''
-install_path = 'C:/Program Files (x86)/Ixia/IxNetwork/8.01-GA'
+install_path = 'C:/Program Files (x86)/Ixia/IxNetwork/8.20-EA'
 
 
 def create_context(session):
@@ -27,8 +27,8 @@ def create_context(session):
 
     context.resource = ResourceContextDetails()
     context.resource.name = 'IxNetwork Controller'
-    context.resource.address = controller
     context.resource.attributes = {'Client Install Path': install_path,
+                                   'Controller Address': controller,
                                    'Controller TCP Port': port}
 
     context.reservation = ReservationContextDetails()
@@ -44,7 +44,7 @@ class TestIxNetworkControllerDriver(unittest.TestCase):
     def setUp(self):
         self.session = CloudShellAPISession('localhost', 'admin', 'admin', 'Global')
         self.context = create_context(self.session)
-        self.driver = IxiaControllerDriver()
+        self.driver = IxNetworkControllerDriver()
         self.driver.initialize(self.context)
 
     def tearDown(self):
@@ -61,11 +61,14 @@ class TestIxNetworkControllerDriver(unittest.TestCase):
         self.session.SetAttributeValue(reservation_ports[1].Name, 'Logical Name', ' Port 2 ')
         self.driver.load_config(self.context, 'test_config.ixncfg')
 
-    def run_traffic(self):
+    def test_run_traffic(self):
         self.test_load_config()
         self.driver.send_arp(self.context)
         self.driver.start_traffic(self.context, True)
-        stats = self.driver.get_statistics(self.context, 'Port Statistics', 'JSON')
+        stats = self.driver.get_statistics(self.context, 'Port Statistics', 'json')
+        print stats
+        assert(int(stats['Port 1']['Frames Tx.']) == 1600)
+        stats = self.driver.get_statistics(self.context, 'Port Statistics', 'csv')
         print stats
 
     def negative_tests(self):
@@ -78,6 +81,8 @@ class TestIxNetworkControllerDriver(unittest.TestCase):
         self.assertRaises(Exception, self.driver.load_config, self.context, 'test_config.ixncfg')
         self.session.SetAttributeValue(reservation_ports[1].Name, 'Logical Name', 'Port x')
         self.assertRaises(Exception, self.driver.load_config, self.context, 'test_config.ixncfg')
+        # cleanup
+        self.session.SetAttributeValue(reservation_ports[1].Name, 'Logical Name', 'Port 2')
 
 if __name__ == '__main__':
     sys.exit(unittest.main())

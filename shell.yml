@@ -1,7 +1,7 @@
 shell:
-    name: Ixia
-    author: ''
-    email: ''
-    description: Ixia
-    version: 1.0.0
-    driver_name: IxiaControllerDriver
+    name: ixia_ixnetwork_controller
+    author: Yoram Shamir
+    email: yoram-s@quali.com
+    description: ixia IxNetwork Controller
+    version: 1.1.0
+    driver_name: IxNetworkControllerDriver

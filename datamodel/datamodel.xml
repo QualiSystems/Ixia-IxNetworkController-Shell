@@ -7,7 +7,14 @@
         		<Rule Name="Configuration" />
       		</Rules>
     	</AttributeInfo>  	
-    	<AttributeInfo Name="Controller TCP Port" Type="String" DefaultValue="" IsReadOnly="false" Description="The TCP port of the traffic server. Relevant only in case an external server is configured. Default TCP port should be used if kept empty.">
+    	<AttributeInfo Name="Controller Address" Type="String" DefaultValue="" IsReadOnly="false"
+    				   Description="The IP address of the traffic server. Relevant only in case an external server is configured.">
+      		<Rules>
+        		<Rule Name="Configuration" />
+      		</Rules>
+    	</AttributeInfo>  	
+    	<AttributeInfo Name="Controller TCP Port" Type="String" DefaultValue="" IsReadOnly="false"
+    				   Description="The TCP port of the traffic server. Relevant only in case an external server is configured. Default TCP port should be used if kept empty.">
       		<Rules>
         		<Rule Name="Configuration" />
       		</Rules>
@@ -15,14 +22,16 @@
 	</Attributes>
  
 	<ResourceFamilies>
-    	<ResourceFamily Name="Traffic Generator Controller" Description="" IsSearchable="true">
+    	<ResourceFamily Name="Traffic Generator Controller" Description="" IsService="true" ServiceType="Regular">
 			<Models />
-      		<Categories />
+			<Categories>
+       			<Category>Traffic Generator Controllers</Category>
+      		</Categories>
     	</ResourceFamily>
   	</ResourceFamilies>
  
   <DriverDescriptors>
-      <DriverDescriptor Name="IxiaControllerDriver" DriverType="PythonDriver" />
+      <DriverDescriptor Name="IxNetworkControllerDriver" DriverType="PythonDriver" />
   </DriverDescriptors>
 
 </DataModelInfo>

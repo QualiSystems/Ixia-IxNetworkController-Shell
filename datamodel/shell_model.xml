@@ -7,15 +7,18 @@
         <ResourceModel Name="IxNetwork Controller" Description="Ixia IxNetwork controller" SupportsConcurrentCommands="true">
 			<AttachedAttributes>
 
-        		<AttachedAttribute Name="Client Install Path" IsOverridable="true" IsLocal="true">
+        		<AttachedAttribute Name="Client Install Path" IsOverridable="true" IsLocal="true" UserInput="true">
             		<AllowedValues />
           		</AttachedAttribute>
-        		<AttachedAttribute Name="Controller TCP Port" IsOverridable="true" IsLocal="true">
+        		<AttachedAttribute Name="Controller Address" IsOverridable="true" IsLocal="true" UserInput="true">
+            		<AllowedValues />
+          		</AttachedAttribute>
+        		<AttachedAttribute Name="Controller TCP Port" IsOverridable="true" IsLocal="true" UserInput="true">
             		<AllowedValues />
           		</AttachedAttribute>
 			</AttachedAttributes>
             <Drivers>
-                <DriverName>IxiaControllerDriver</DriverName>
+                <DriverName>IxNetworkControllerDriver</DriverName>
             </Drivers>			
         </ResourceModel>
     </ShellModel>
