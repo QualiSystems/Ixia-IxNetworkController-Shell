@@ -4,46 +4,21 @@
 import sys
 import unittest
 
-from cloudshell.shell.core.context import (ResourceCommandContext, ResourceContextDetails, ReservationContextDetails,
-                                           ConnectivityContext)
 from cloudshell.api.cloudshell_api import CloudShellAPISession
-from src.driver import IxNetworkControllerDriver
-from src.ixn_handler import get_reservation_ports
+
+from driver import IxNetworkControllerDriver
+import tg_helper
 
 controller = 'localhost'
 port = ''
-install_path = 'C:/Program Files (x86)/Ixia/IxNetwork/8.20-EA'
-
-
-def create_context(session):
-    context = ResourceCommandContext()
-
-    context.connectivity = ConnectivityContext()
-    context.connectivity.server_address = 'localhost'
-    context.connectivity.admin_auth_token = session.token_id
-
-    response = session.CreateImmediateTopologyReservation('ixn unittest', 'admin', 60, False, False, 0, 'ixn test',
-                                                          [], [], [])
-
-    context.resource = ResourceContextDetails()
-    context.resource.name = 'IxNetwork Controller'
-    context.resource.attributes = {'Client Install Path': install_path,
-                                   'Controller Address': controller,
-                                   'Controller TCP Port': port}
-
-    context.reservation = ReservationContextDetails()
-    context.reservation.reservation_id = response.Reservation.Id
-    context.reservation.owner_user = response.Reservation.Owner
-    context.reservation.domain = response.Reservation.DomainName
-
-    return context
+client_install_path = 'C:/Program Files (x86)/Ixia/IxNetwork/8.01-GA'
 
 
 class TestIxNetworkControllerDriver(unittest.TestCase):
 
     def setUp(self):
         self.session = CloudShellAPISession('localhost', 'admin', 'admin', 'Global')
-        self.context = create_context(self.session)
+        self.context = tg_helper.create_context(self.session, 'ixn test', 'IxNetwork Controller', client_install_path)
         self.driver = IxNetworkControllerDriver()
         self.driver.initialize(self.context)
 
@@ -56,23 +31,23 @@ class TestIxNetworkControllerDriver(unittest.TestCase):
         pass
 
     def test_load_config(self):
-        reservation_ports = get_reservation_ports(self.session, self.context.reservation.reservation_id)
+        reservation_ports = tg_helper.get_reservation_ports(self.session, self.context.reservation.reservation_id)
         self.session.SetAttributeValue(reservation_ports[0].Name, 'Logical Name', 'Port 1')
-        self.session.SetAttributeValue(reservation_ports[1].Name, 'Logical Name', ' Port 2 ')
+        self.session.SetAttributeValue(reservation_ports[1].Name, 'Logical Name', 'Port 2')
         self.driver.load_config(self.context, 'test_config.ixncfg')
 
     def test_run_traffic(self):
         self.test_load_config()
         self.driver.send_arp(self.context)
-        self.driver.start_traffic(self.context, True)
-        stats = self.driver.get_statistics(self.context, 'Port Statistics', 'json')
+        self.driver.start_traffic(self.context, 'True')
+        stats = self.driver.get_statistics(self.context, 'Port Statistics', 'JSON')
         print stats
         assert(int(stats['Port 1']['Frames Tx.']) == 1600)
         stats = self.driver.get_statistics(self.context, 'Port Statistics', 'csv')
         print stats
 
     def negative_tests(self):
-        reservation_ports = get_reservation_ports(self.session, self.context.reservation.reservation_id)
+        reservation_ports = tg_helper.get_reservation_ports(self.session, self.context.reservation.reservation_id)
         assert(len(reservation_ports) == 2)
         self.session.SetAttributeValue(reservation_ports[0].Name, 'Logical Name', 'Port 1')
         self.session.SetAttributeValue(reservation_ports[1].Name, 'Logical Name', '')
@@ -83,6 +58,13 @@ class TestIxNetworkControllerDriver(unittest.TestCase):
         self.assertRaises(Exception, self.driver.load_config, self.context, 'test_config.ixncfg')
         # cleanup
         self.session.SetAttributeValue(reservation_ports[1].Name, 'Logical Name', 'Port 2')
+
+    def test_run_quick_test(self):
+        reservation_ports = tg_helper.get_reservation_ports(self.session, self.context.reservation.reservation_id)
+        self.session.SetAttributeValue(reservation_ports[0].Name, 'Logical Name', 'Port 1')
+        self.session.SetAttributeValue(reservation_ports[1].Name, 'Logical Name', 'Port 2')
+        self.driver.load_config(self.context, 'quick_tests.ixncfg')
+        print self.driver.run_quick_test(self.context, 'QuickTest3')
 
 if __name__ == '__main__':
     sys.exit(unittest.main())

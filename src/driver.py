@@ -1,14 +1,14 @@
 
 from cloudshell.shell.core.resource_driver_interface import ResourceDriverInterface
-from cloudshell.shell.core.context_utils import get_resource_name
 
-from ixn_handler import IxiaHandler
+from ixn_handler import IxnHandler
+import tg_helper
 
 
 class IxNetworkControllerDriver(ResourceDriverInterface):
 
     def __init__(self):
-        self.handler = IxiaHandler()
+        self.handler = IxnHandler()
 
     def initialize(self, context):
         """
@@ -19,20 +19,16 @@ class IxNetworkControllerDriver(ResourceDriverInterface):
                                 context.resource.attributes['Controller Address'],
                                 context.resource.attributes['Controller TCP Port'])
 
-    def load_config(self, context, ixia_config_file_name):
+    def load_config(self, context, ixn_config_file_name):
         """ Load IxNetwork configuration file and reserve ports.
 
         :type context: cloudshell.shell.core.driver_context.ResourceRemoteCommandContext
-        :param ixia_config_file_name: full path to IxNetwork configuration file (ixncfg).
+        :param ixn_config_file_name: full path to IxNetwork configuration file (ixncfg).
         """
 
-        my_api = self.handler.get_api(context)
-        reservation_id = context.reservation.reservation_id
-        resource_name = get_resource_name(context=context)
-        my_api.EnqueueCommand(reservationId=reservation_id, targetName=resource_name, commandName="keep_alive",
-                              targetType="Service")
-
-        self.handler.load_config(context, ixia_config_file_name)
+        tg_helper.enqueue_keep_alive(context)
+        self.handler.load_config(context, ixn_config_file_name)
+        return ixn_config_file_name + ' loaded, ports reserved'
 
     def send_arp(self, context):
         """ Send ARP for all objects.
@@ -92,11 +88,12 @@ class IxNetworkControllerDriver(ResourceDriverInterface):
         :param test: name of quick test to run.
         """
 
-        self.handler.run_quick_test(context, test)
+        quick_test_resut = self.handler.run_quick_test(context, test)
+        tg_helper.write_to_reservation_out(context, 'Quick test result = ' + quick_test_resut)
+        return quick_test_resut
 
     def cleanup(self):
         self.handler.tearDown()
-        pass
 
     def keep_alive(self, context, cancellation_context):
 
