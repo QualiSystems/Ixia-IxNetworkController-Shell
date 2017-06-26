@@ -1,23 +1,15 @@
 
-from cloudshell.shell.core.resource_driver_interface import ResourceDriverInterface
+from cloudshell.traffic.driver import TrafficControllerDriver
+import cloudshell.traffic.tg_helper as tg_helper
 
 from ixn_handler import IxnHandler
-import tg_helper
 
 
-class IxNetworkControllerDriver(ResourceDriverInterface):
+class IxNetworkControllerDriver(TrafficControllerDriver):
 
     def __init__(self):
+        super(self.__class__, self).__init__()
         self.handler = IxnHandler()
-
-    def initialize(self, context):
-        """
-        :type context:  cloudshell.shell.core.driver_context.ResourceRemoteCommandContext
-        """
-
-        self.handler.initialize(context.resource.attributes['Client Install Path'],
-                                context.resource.attributes['Controller Address'],
-                                context.resource.attributes['Controller TCP Port'])
 
     def load_config(self, context, ixn_config_file_name):
         """ Load IxNetwork configuration file and reserve ports.
@@ -26,7 +18,7 @@ class IxNetworkControllerDriver(ResourceDriverInterface):
         :param ixn_config_file_name: full path to IxNetwork configuration file (ixncfg).
         """
 
-        tg_helper.enqueue_keep_alive(context)
+        super(self.__class__, self).load_config(context)
         self.handler.load_config(context, ixn_config_file_name)
         return ixn_config_file_name + ' loaded, ports reserved'
 
@@ -92,12 +84,15 @@ class IxNetworkControllerDriver(ResourceDriverInterface):
         tg_helper.write_to_reservation_out(context, 'Quick test result = ' + quick_test_resut)
         return quick_test_resut
 
+    #
+    # Parent commands are not visible so we re define them in child.
+    #
+
+    def initialize(self, context):
+        super(self.__class__, self).initialize(context)
+
     def cleanup(self):
-        self.handler.tearDown()
+        super(self.__class__, self).cleanup()
 
     def keep_alive(self, context, cancellation_context):
-
-        while not cancellation_context.is_cancelled:
-            pass
-        if cancellation_context.is_cancelled:
-            self.handler.tearDown()
+        super(self.__class__, self).keep_alive(context, cancellation_context)

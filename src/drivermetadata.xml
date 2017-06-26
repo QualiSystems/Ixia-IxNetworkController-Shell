@@ -1,4 +1,4 @@
-<Driver Description="Shell to setup and run Ixia traffic generator" MainClass="driver.IxNetworkControllerDriver" Name="IxiaControllerDriver" Version="1.1.0">
+<Driver Description="Shell to setup and run Ixia traffic generator" MainClass="driver.IxNetworkControllerDriver" Name="IxiaControllerDriver" Version="1.2.0">
     <Layout>
          <Category Name="Hidden Commands">
             <Command Name="keep_alive" DisplayName="Keep Alive" Tags="" Description="" EnableCancellation="true"/>
@@ -39,7 +39,8 @@
                 		   Description="CSV or JSON" />
             </Parameters>
         </Command>
-        <Command Name="run_quick_test" DisplayName="Run Quick Test" Description="">
+        <Command Name="run_quick_test" DisplayName="Run Quick Test"
+        		 Description="Run quick test">
             <Parameters>
             	<Parameter Name="test" DisplayName="Quick Test Name" Type="String" Mandatory="True" DefaultValue=""
                            Description="Name of quick test to run" />
