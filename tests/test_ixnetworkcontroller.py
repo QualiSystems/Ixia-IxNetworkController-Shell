@@ -3,24 +3,28 @@
 
 import sys
 import unittest
+import logging
 
 from cloudshell.api.cloudshell_api import CloudShellAPISession
+import cloudshell.traffic.tg_helper as tg_helper
 
 from driver import IxNetworkControllerDriver
-import tg_helper
 
 controller = 'localhost'
 port = ''
 client_install_path = 'C:/Program Files (x86)/Ixia/IxNetwork/8.01-GA'
+environment = 'ixn test'
 
 
 class TestIxNetworkControllerDriver(unittest.TestCase):
 
     def setUp(self):
         self.session = CloudShellAPISession('localhost', 'admin', 'admin', 'Global')
-        self.context = tg_helper.create_context(self.session, 'ixn test', 'IxNetwork Controller', client_install_path)
+        self.context = tg_helper.create_context(self.session, environment, 'IxNetwork Controller', client_install_path)
         self.driver = IxNetworkControllerDriver()
         self.driver.initialize(self.context)
+        print self.driver.logger.handlers[0].baseFilename
+        self.driver.logger.addHandler(logging.StreamHandler(sys.stdout))
 
     def tearDown(self):
         self.driver.cleanup()
@@ -39,7 +43,10 @@ class TestIxNetworkControllerDriver(unittest.TestCase):
     def test_run_traffic(self):
         self.test_load_config()
         self.driver.send_arp(self.context)
-        self.driver.start_traffic(self.context, 'True')
+        self.driver.start_protocols(self.context)
+        self.driver.stop_protocols(self.context)
+        self.driver.start_traffic(self.context, 'False')
+        self.driver.stop_traffic(self.context)
         stats = self.driver.get_statistics(self.context, 'Port Statistics', 'JSON')
         print stats
         assert(int(stats['Port 1']['Frames Tx.']) == 1600)

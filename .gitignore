@@ -67,3 +67,5 @@ cloudshell_config.yml
 .pydevproject
 .settings
 .project
+
+*.pdf
