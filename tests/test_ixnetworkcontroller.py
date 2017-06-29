@@ -48,7 +48,9 @@ class TestIxNetworkControllerDriver(unittest.TestCase):
         self.driver.start_traffic(self.context, 'False')
         self.driver.stop_traffic(self.context)
         stats = self.driver.get_statistics(self.context, 'Port Statistics', 'JSON')
-        print stats
+        assert(int(stats['Port 1']['Frames Tx.']) < 1600)
+        self.driver.start_traffic(self.context, 'True')
+        stats = self.driver.get_statistics(self.context, 'Port Statistics', 'JSON')
         assert(int(stats['Port 1']['Frames Tx.']) == 1600)
         stats = self.driver.get_statistics(self.context, 'Port Statistics', 'csv')
         print stats
