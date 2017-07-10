@@ -1,4 +1,4 @@
-<Driver Description="Shell to setup and run Ixia traffic generator" MainClass="driver.IxNetworkControllerDriver" Name="IxiaControllerDriver" Version="1.2.1">
+<Driver Description="Shell to setup and run Ixia traffic generator" MainClass="driver.IxNetworkControllerDriver" Name="IxiaControllerDriver" Version="1.2.2">
     <Layout>
          <Category Name="Hidden Commands">
             <Command Name="keep_alive" DisplayName="Keep Alive" Tags="" Description="" EnableCancellation="true"/>

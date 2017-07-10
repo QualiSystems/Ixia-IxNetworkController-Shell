@@ -1,4 +1,4 @@
 cloudshell-shell-core>=3.1,<3.2
 cloudshell-automation-api>=8.1,<8.2
-ixnooapi
-cloudshell-traffic
+cloudshell-traffic>=0.9.9.5
+ixnooapi==0.9.6.2
