@@ -37,16 +37,16 @@ class IxnHandler(TrafficHandler):
         self.ixn.connect(tcl_server=tcl_server, tcl_port=tcl_port)
 
     def tearDown(self):
-        for port in self.ixn.root.get_ports().values():
+        for port in self.ixn.root.get_children('vport'):
             port.release()
         self.tcl_interp.stop()
 
     def load_config(self, context, ixia_config_file_name):
 
         self.ixn.load_config(ixia_config_file_name)
-        config_ports = self.ixn.root.get_ports()
+        config_ports = self.ixn.root.get_children('vport')
 
-        for port in self.ixn.root.get_ports().values():
+        for port in config_ports:
             port.release()
 
         reservation_id = context.reservation.reservation_id
@@ -56,7 +56,8 @@ class IxnHandler(TrafficHandler):
         for port in tg_helper.get_reservation_ports(my_api, reservation_id):
             reservation_ports[my_api.GetAttributeValue(port.Name, 'Logical Name').Value.strip()] = port
 
-        for name, port in config_ports.items():
+        for port in config_ports:
+            name = port.obj_name()
             if name in reservation_ports:
                 address = tg_helper.get_address(reservation_ports[name])
                 self.logger.debug('Logical Port {} will be reserved on Physical location {}'.format(name, address))
@@ -67,7 +68,7 @@ class IxnHandler(TrafficHandler):
                 raise Exception('Configuration port "{}" not found in reservation ports {}'.
                                 format(port, reservation_ports.keys()))
 
-        for port in self.ixn.root.get_ports().values():
+        for port in config_ports:
             port.wait_for_states(40, 'up')
 
         self.logger.info("Port Reservation Completed")
