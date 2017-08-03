@@ -1,7 +1,7 @@
 shell:
-    name: ixia_ixnetwork_controller
-    author: Yoram Shamir
-    email: yoram-s@quali.com
-    description: Ixia IxNetwork Controller
-    version: 1.2.2
-    driver_name: IxNetworkControllerDriver
+  author: Yoram Shamir
+  description: Ixia IxNetwork Controller
+  driver_name: IxNetworkControllerDriver
+  email: yoram-s@quali.com
+  name: ixia_ixnetwork_controller
+  version: 1.2.3

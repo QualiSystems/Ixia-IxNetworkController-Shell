@@ -1,49 +1,36 @@
-<Driver Description="Shell to setup and run Ixia traffic generator" MainClass="driver.IxNetworkControllerDriver" Name="IxiaControllerDriver" Version="1.2.2">
+<Driver Description="Shell to setup and run Ixia traffic generator" MainClass="driver.IxNetworkControllerDriver" Name="IxiaControllerDriver" Version="1.2.3">
     <Layout>
          <Category Name="Hidden Commands">
-            <Command Name="keep_alive" DisplayName="Keep Alive" Tags="" Description="" EnableCancellation="true"/>
+            <Command Description="" DisplayName="Keep Alive" EnableCancellation="true" Name="keep_alive" Tags="" />
         </Category>
 
-		<Command Name="load_config" DisplayName="Load Configuration"
-				 Description="Load configuration and reserve ports">
+		<Command Description="Load configuration and reserve ports" DisplayName="Load Configuration" Name="load_config">
 	    	<Parameters>
-            	<Parameter Name="ixia_config_file_name" DisplayName="Ixia config file name" Type="String" Mandatory="True"
-                           Description="Full path to Ixia configuration file name" />
+            	<Parameter Description="Full path to Ixia configuration file name" DisplayName="Ixia config file name" Mandatory="True" Name="ixia_config_file_name" Type="String" />
             </Parameters>
         </Command>
-		<Command Name="send_arp" DisplayName="Start ARP/ND"
-				 Description="Send ARP/ND for all protocols" >
+		<Command Description="Send ARP/ND for all protocols" DisplayName="Start ARP/ND" Name="send_arp">
         </Command>
-		<Command Name="start_protocols" DisplayName="Start Protocols"
-				 Description="Start all protocls" >
+		<Command Description="Start all protocols" DisplayName="Start Protocols" Name="start_protocols">
         </Command>
-		<Command Name="stop_protocols" DisplayName="Stop Protocols"
-				 Description="Stop all protocols" >
+		<Command Description="Stop all protocols" DisplayName="Stop Protocols" Name="stop_protocols">
         </Command>
-        <Command Name="start_traffic" DisplayName="Start Traffic"
-        		 Description="Start L2-3 Traffic">
+        <Command Description="Start L2-3 Traffic" DisplayName="Start Traffic" Name="start_traffic">
             <Parameters>
-            	<Parameter Name="blocking" DisplayName="Blocking" Type="Lookup" Mandatory="True" AllowedValues="True, False" DefaultValue="False"
-                           Description="True - return after traffic finish to run, False - return immediately" />
+            	<Parameter AllowedValues="True, False" DefaultValue="False" Description="True - return after traffic finish to run, False - return immediately" DisplayName="Blocking" Mandatory="True" Name="blocking" Type="Lookup" />
             </Parameters>
         </Command>
-        <Command Name="stop_traffic" DisplayName="Stop Traffic"
-        		 Description="Stop L2-3 Traffic">
+        <Command Description="Stop L2-3 Traffic" DisplayName="Stop Traffic" Name="stop_traffic">
         </Command>
-        <Command Name="get_statistics" DisplayName="Get Statistics"
-        		 Description="Get view statistics" >
+        <Command Description="Get view statistics" DisplayName="Get Statistics" Name="get_statistics">
         	<Parameters>
-            	<Parameter Name="view_name" DisplayName="View Name" Type="String" Mandatory="True" DefaultValue=""
-                           Description="Port Statistics, Traffic Item Statistics, Flow Statistics, etc." />
-                <Parameter Name="output_type" DisplayName="Output Type" Type="Lookup" Mandatory="True" AllowedValues="CSV, JSON" DefaultValue="CSV"
-                		   Description="CSV or JSON" />
+            	<Parameter DefaultValue="" Description="Port Statistics, Traffic Item Statistics, Flow Statistics, etc." DisplayName="View Name" Mandatory="True" Name="view_name" Type="String" />
+                <Parameter AllowedValues="CSV, JSON" DefaultValue="CSV" Description="CSV or JSON" DisplayName="Output Type" Mandatory="True" Name="output_type" Type="Lookup" />
             </Parameters>
         </Command>
-        <Command Name="run_quick_test" DisplayName="Run Quick Test"
-        		 Description="Run quick test">
+        <Command Description="Run quick test" DisplayName="Run Quick Test" Name="run_quick_test">
             <Parameters>
-            	<Parameter Name="test" DisplayName="Quick Test Name" Type="String" Mandatory="True" DefaultValue=""
-                           Description="Name of quick test to run" />
+            	<Parameter DefaultValue="" Description="Name of quick test to run" DisplayName="Quick Test Name" Mandatory="True" Name="test" Type="String" />
             </Parameters>
         </Command>
 
