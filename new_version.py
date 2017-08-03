@@ -53,7 +53,7 @@ def main(args):
     if parsed_args.message:
         repo = Repo('.')
         repo.git.add('.')
-        repo.git.commit('-m version {}'.format(parsed_args.release))
+        repo.git.commit('-m version {}'.format(parsed_args.message))
         repo.git.push()
 
 # git push . development:master
