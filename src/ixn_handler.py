@@ -7,9 +7,8 @@ from cloudshell.shell.core.session.cloudshell_session import CloudShellSessionCo
 from cloudshell.traffic.handler import TrafficHandler
 import cloudshell.traffic.tg_helper as tg_helper
 
-from trafficgenerator.tgn_tcl import TgnTkMultithread
-from ixnetwork.ixn_app import IxnApp
-from ixnetwork.api.ixn_tcl import IxnTclWrapper
+from trafficgenerator.tgn_utils import ApiType
+from ixnetwork.ixn_app import init_ixn
 from ixnetwork.ixn_statistics_view import IxnStatisticsView, IxnFlowStatistics
 
 
@@ -23,11 +22,8 @@ class IxnHandler(TrafficHandler):
         tcl_server = context.resource.attributes['Controller Address']
         tcl_port = context.resource.attributes['Controller TCP Port']
 
-        self.tcl_interp = TgnTkMultithread()
-        self.tcl_interp.start()
         self.logger.debug('client_install_path = ' + client_install_path)
-        api_wrapper = IxnTclWrapper(self.logger, client_install_path, self.tcl_interp)
-        self.ixn = IxnApp(self.logger, api_wrapper)
+        self.ixn = init_ixn(ApiType.tcl, self.logger, client_install_path)
 
         if tcl_server.lower() in ('na', ''):
             tcl_server = 'localhost'
@@ -39,7 +35,6 @@ class IxnHandler(TrafficHandler):
     def tearDown(self):
         for port in self.ixn.root.get_children('vport'):
             port.release()
-        self.tcl_interp.stop()
 
     def load_config(self, context, ixia_config_file_name):
 
@@ -92,9 +87,9 @@ class IxnHandler(TrafficHandler):
     def get_statistics(self, context, view_name, output_type):
 
         if view_name == 'Flow Statistics':
-            stats_obj = IxnFlowStatistics()
+            stats_obj = IxnFlowStatistics(self.ixn.root)
         else:
-            stats_obj = IxnStatisticsView(view_name)
+            stats_obj = IxnStatisticsView(self.ixn.root, view_name)
 
         stats_obj.read_stats()
         statistics = stats_obj.get_all_stats()
