@@ -5,7 +5,8 @@ import io
 
 from cloudshell.shell.core.session.cloudshell_session import CloudShellSessionContext
 from cloudshell.traffic.handler import TrafficHandler
-import cloudshell.traffic.tg_helper as tg_helper
+from cloudshell.traffic.tg_helper import (get_reservation_resources, get_address, is_blocking, attach_stats_csv,
+                                          get_family_attribute)
 
 from trafficgenerator.tgn_utils import ApiType
 from ixnetwork.ixn_app import init_ixn
@@ -18,23 +19,22 @@ class IxnHandler(TrafficHandler):
 
         self.logger = logger
 
-        client_install_path = context.resource.attributes['Client Install Path'].replace('\\', '/')
         tcl_server = context.resource.attributes['Controller Address']
         tcl_port = context.resource.attributes['Controller TCP Port']
 
-        self.logger.debug('client_install_path = ' + client_install_path)
-        self.ixn = init_ixn(ApiType.tcl, self.logger, client_install_path)
+        self.ixn = init_ixn(ApiType.rest, self.logger)
 
         if tcl_server.lower() in ('na', ''):
             tcl_server = 'localhost'
         if not tcl_port:
-            tcl_port = 8009
+            tcl_port = 11009
         self.logger.debug("connecting to tcl server {} at {} port".format(tcl_server, tcl_port))
         self.ixn.connect(tcl_server=tcl_server, tcl_port=tcl_port)
 
     def tearDown(self):
-        for port in self.ixn.root.get_children('vport'):
+        for port in self.ixn.root.get_objects_by_type('vport'):
             port.release()
+        self.ixn.disconnect()
 
     def load_config(self, context, ixia_config_file_name):
 
@@ -48,13 +48,16 @@ class IxnHandler(TrafficHandler):
         my_api = CloudShellSessionContext(context).get_api()
 
         reservation_ports = {}
-        for port in tg_helper.get_reservation_ports(my_api, reservation_id):
-            reservation_ports[my_api.GetAttributeValue(port.Name, 'Logical Name').Value.strip()] = port
+        for port in get_reservation_resources(my_api, reservation_id,
+                                              'Generic Traffic Generator Port',
+                                              'PerfectStorm Chassis Shell 2G.GenericTrafficGeneratorPort',
+                                              'Ixia Chassis Shell 2G.GenericTrafficGeneratorPort'):
+            reservation_ports[get_family_attribute(my_api, port, 'Logical Name').Value.strip()] = port
 
         for port in config_ports:
             name = port.obj_name()
             if name in reservation_ports:
-                address = tg_helper.get_address(reservation_ports[name])
+                address = get_address(reservation_ports[name])
                 self.logger.debug('Logical Port {} will be reserved on Physical location {}'.format(name, address))
                 port.reserve(address, wait_for_up=False)
             else:
@@ -78,8 +81,9 @@ class IxnHandler(TrafficHandler):
         self.ixn.protocols_stop()
 
     def start_traffic(self, blocking):
+        self.ixn.regenerate()
         self.ixn.traffic_apply()
-        self.ixn.l23_traffic_start(tg_helper.is_blocking(blocking))
+        self.ixn.l23_traffic_start(is_blocking(blocking))
 
     def stop_traffic(self):
         self.ixn.l23_traffic_stop()
@@ -102,7 +106,7 @@ class IxnHandler(TrafficHandler):
             w.writeheader()
             for obj_name in statistics:
                 w.writerow(statistics[obj_name])
-            tg_helper.attach_stats_csv(context, self.logger, view_name, output.getvalue().strip())
+            attach_stats_csv(context, self.logger, view_name, output.getvalue().strip())
             return output.getvalue().strip()
         else:
             raise Exception('Output type should be CSV/JSON - got "{}"'.format(output_type))

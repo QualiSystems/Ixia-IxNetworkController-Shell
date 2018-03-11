@@ -18,6 +18,7 @@ class IxNetworkControllerDriver(TrafficControllerDriver):
         :param ixn_config_file_name: full path to IxNetwork configuration file (ixncfg).
         """
 
+        self.logger.info('ixn_config_file_name = ' + ixn_config_file_name)
         super(self.__class__, self).load_config(context)
         self.handler.load_config(context, ixn_config_file_name)
         return ixn_config_file_name + ' loaded, ports reserved'

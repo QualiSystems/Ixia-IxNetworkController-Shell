@@ -6,9 +6,6 @@
     <ShellModel Family="Traffic Generator Controller">
         <ResourceModel Name="IxNetwork Controller" Description="Ixia IxNetwork controller" SupportsConcurrentCommands="true">
 			<AttachedAttributes>
-        		<AttachedAttribute Name="Client Install Path" IsOverridable="true" IsLocal="true" UserInput="true">
-            		<AllowedValues />
-          		</AttachedAttribute>
         		<AttachedAttribute Name="Controller Address" IsOverridable="true" IsLocal="true" UserInput="true">
             		<AllowedValues />
           		</AttachedAttribute>
