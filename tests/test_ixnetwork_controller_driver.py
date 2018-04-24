@@ -11,7 +11,7 @@ from shellfoundry.releasetools.test_helper import create_session_from_cloudshell
 
 from src.driver import IxNetworkControllerDriver
 
-controller = '192.168.85.23'
+controller = '192.168.85.7'
 port = '8008'
 
 ports = ['IxVM 801/Module1/Port1', 'IxVM 801/Module1/Port2']
@@ -86,7 +86,7 @@ class TestIxNetworkControllerDriver(unittest.TestCase):
                                                       'Ixia Chassis Shell 2G.GenericTrafficGeneratorPort')
         set_family_attribute(self.session, reservation_ports[0], 'Logical Name', 'Port 1')
         set_family_attribute(self.session, reservation_ports[1], 'Logical Name', 'Port 2')
-        self.driver.load_config(self.context, path.join(path.dirname(__file__), 'quick_tests.ixncfg'))
+        self.driver.load_config(self.context, path.join(path.dirname(__file__), 'quick_tests_840.ixncfg'))
         print self.driver.run_quick_test(self.context, 'QuickTest3')
 
 
