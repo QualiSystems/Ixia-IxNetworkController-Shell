@@ -12,6 +12,8 @@ from cloudshell.traffic.tg_helper import get_reservation_resources, set_family_a
 from shellfoundry.releasetools.test_helper import create_session_from_cloudshell_config, create_command_context
 
 # must be str
+controller = '172.40.0.163'
+port = '8008'
 controller = 'localhost'
 port = '11009'
 
@@ -22,7 +24,7 @@ attributes = [AttributeNameValue('Controller Address', controller),
               AttributeNameValue('Controller TCP Port', port)]
 
 
-class TestIxNetworkControllerDriver(unittest.TestCase):
+class TestIxNetworkControllerShell(unittest.TestCase):
 
     def setUp(self):
         self.session = create_session_from_cloudshell_config()
@@ -34,6 +36,40 @@ class TestIxNetworkControllerDriver(unittest.TestCase):
         while self.session.GetReservationDetails(reservation_id).ReservationDescription.Status != 'Completed':
             time.sleep(1)
         self.session.DeleteReservation(reservation_id)
+
+    def test_session_id(self):
+        session_id = self.session.ExecuteCommand(self.context.reservation.reservation_id, 'IxNetwork Controller',
+                                                 'Service', 'get_session_id')
+        print('session_id = {}'.format(session_id.Output[1:-1]))
+        root_obj = '{}ixnetwork'.format(session_id.Output[1:-1])
+        print('root_obj = {}'.format(root_obj))
+
+        globals = self.session.ExecuteCommand(self.context.reservation.reservation_id, 'IxNetwork Controller',
+                                              'Service', 'get_children',
+                                              [InputNameValue('obj_ref', root_obj),
+                                               InputNameValue('child_type', 'globals')])
+        print('globals = {}'.format(globals.Output))
+        globals_obj = json.loads(globals.Output)[0]
+        prefs = self.session.ExecuteCommand(self.context.reservation.reservation_id, 'IxNetwork Controller',
+                                            'Service', 'get_children',
+                                            [InputNameValue('obj_ref', globals_obj),
+                                             InputNameValue('child_type', 'preferences')])
+        print('preferences = {}'.format(prefs.Output))
+        prefs_obj = json.loads(prefs.Output)[0]
+        prefs_attrs = self.session.ExecuteCommand(self.context.reservation.reservation_id, 'IxNetwork Controller',
+                                                  'Service', 'get_attributes',
+                                                  [InputNameValue('obj_ref', prefs_obj)])
+        print('preferences attributes = {}'.format(prefs_attrs.Output))
+
+        self.session.ExecuteCommand(self.context.reservation.reservation_id, 'IxNetwork Controller',
+                                    'Service', 'set_attribute',
+                                    [InputNameValue('obj_ref', prefs_obj),
+                                     InputNameValue('attr_name', 'connectPortsOnLoadConfig'),
+                                     InputNameValue('attr_value', 'True')])
+        prefs_attrs = self.session.ExecuteCommand(self.context.reservation.reservation_id, 'IxNetwork Controller',
+                                                  'Service', 'get_attributes',
+                                                  [InputNameValue('obj_ref', prefs_obj)])
+        print('preferences attributes = {}'.format(prefs_attrs.Output))
 
     def test_load_config(self):
         self._load_config(path.join(path.dirname(__file__), 'test_config_840.ixncfg'))

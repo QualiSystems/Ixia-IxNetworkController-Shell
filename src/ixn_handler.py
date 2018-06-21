@@ -115,3 +115,15 @@ class IxnHandler(TrafficHandler):
 
         self.ixn.quick_test_apply(test)
         return self.ixn.quick_test_start(test, blocking=True, timeout=3600 * 24)
+
+    def get_session_id(self):
+        return self.ixn.api.session
+
+    def get_children(self, obj_ref, child_type):
+        return self.ixn.api.getList(obj_ref, child_type)
+
+    def get_attributes(self, obj_ref):
+        return self.ixn.api.getAttributes(obj_ref)
+
+    def set_attribute(self, obj_ref, attr_name, attr_value):
+        return self.ixn.api.setAttributes(obj_ref, **{attr_name: attr_value})

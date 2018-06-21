@@ -11,12 +11,14 @@ from shellfoundry.releasetools.test_helper import create_session_from_cloudshell
 
 from src.driver import IxNetworkControllerDriver
 
-controller = '192.168.85.7'
+controller = '172.40.0.163'
 port = '8008'
+controller = 'localhost'
+port = '11009'
 
 ports = ['IxVM 801/Module1/Port1', 'IxVM 801/Module1/Port2']
 ports = ['ixia 2g/Module1/Port1', 'ixia 2g/Module2/Port2']
-ports = ['217/Module1/Port1', '217/Module1/Port2']
+ports = ['217/Module1/Port2', '217/Module1/Port1']
 attributes = {'Controller Address': controller,
               'Controller TCP Port': port}
 
