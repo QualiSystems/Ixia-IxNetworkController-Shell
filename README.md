@@ -7,7 +7,7 @@ Release date: June 2018
 
 Shell version: 1.6.0
 
-Document version: A
+Document version: 1.0
 
 # In This Guide
 
