@@ -15,6 +15,7 @@ Document version: 1.0
 * [Downloading the Shell](#downloading-the-shell)
 * [Importing and Configuring the Shell](#importing-and-configuring-the-shell)
 * [Updating Python Dependencies for Shells](#updating-python-dependencies-for-shells)
+* [Associating a CloudShell Service to a Non-Global Domain](#associating-a-cloudshell-service-to-a-non-global-domain)
 * [Typical Workflow](#typical-workflow)
 * [References](#references)
 * [Release Notes](#release-notes)
@@ -193,6 +194,46 @@ In online mode, the execution server automatically downloads and extracts the ap
 
 **To update online Python dependencies:**
 * If there is a live instance of the shell's driver or script, terminate the shell’s instance, as explained [here](http://help.quali.com/Online%20Help/9.0/Portal/Content/CSP/MNG/Mng-Exctn-Srv-Exct.htm#Terminat). If an instance does not exist, the execution server will download the Python dependencies the next time a command of the driver or script runs.
+
+
+## Associating a CloudShell Service to a Non-Global Domain
+
+In order to expose a service to users of a domain that is not the Global domain, you must associate the service to the domain. To do this, you need to associate the service to a category that is assigned to the domain.
+
+When you import a service shell, most shells are automatically assigned a default service category which is associated with the Global domain. For custom shells, this may not be true.
+
+**To associate the Ixia IxNetwork Controller 1G service to a non-global domain:**
+
+**Note:** The association process differs depending on the type of shell - second generation (2G) shell or first generation (1G) shell. The instructions below detail the steps for a 1G service shell.
+
+1. (Optional) You can associate the service to a service category that already exists in CloudShell or associate the service to a new category.
+
+	**Note:** If you do not want to change the category(s) of this shell, you can use the default category that comes out-of-the-box (if it exists).
+	 
+	* Associate the service family to an existing category(s).
+	
+		1. In Resource Manager Client, open the **Resource Families** explorer and click the relevant service family.
+	
+		2. From the right pane, open the **Categories** tab.
+	
+		3. Click **Add**. The **Select Category** dialog box is displayed. 
+	
+		4. Select a category from the catalog and click **OK**.
+	
+	or
+
+	* Modify the 1G category(s) in the shell project’s configuration files to add a new category(s). See [Associating categories to 1st Gen Service Shells](https://devguide.quali.com/reference/9.0.0/associating-service-categories.html).
+
+2. Associate the shell’s service category to a domain.
+	1. In the **Manage** dashboard, click **Categories** from the left sidebar, or **Domains** if you are a domain admin.
+	
+	2. Select **Services Categories**.
+	
+	3. Click the service category that is associated with your service shell.
+	
+	4. In the **Edit Category** dialog box, from the **Domains** drop-down list, select the desired domain(s).
+	
+	5. Click **Save**.
 
 # Typical Workflow 
 
