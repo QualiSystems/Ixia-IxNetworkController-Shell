@@ -1,8 +1,8 @@
-<Driver Description="Shell to setup and run Ixia traffic generator" MainClass="driver.IxNetworkControllerDriver" Name="IxiaControllerDriver" Version="1.6.0">
+<Driver Description="Shell to setup and run Ixia traffic generator" MainClass="driver.IxNetworkControllerDriver" Name="IxiaControllerDriver" Version="1.6.1">
     <Layout>
 
          <Category Name="Hidden Commands">
-	    	<Command Description="API only command to get REST session ID" Name="get_session_id" Tags="" />
+	    	<Command Description="API only command to get IxNetwork REST session ID" Name="get_session_id" Tags="" />
     	   	<Command Description="API only command to get IxNetwork object children" Name="get_children" Tags="" />
        		<Command Description="API only command to get IxNetwork object attributes" Name="get_attributes" Tags="" />
           	<Command Description="API only command to set IxNetwork object attribute" Name="set_attribute" Tags="" />

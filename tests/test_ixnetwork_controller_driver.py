@@ -11,21 +11,20 @@ from shellfoundry.releasetools.test_helper import create_session_from_cloudshell
 
 from src.driver import IxNetworkControllerDriver
 
-controller = '172.40.0.163'
+controller = '172.40.0.228'
 port = '8008'
-controller = 'localhost'
-port = '11009'
 
 ports = ['IxVM 801/Module1/Port1', 'IxVM 801/Module1/Port2']
 ports = ['ixia 2g/Module1/Port1', 'ixia 2g/Module2/Port2']
 ports = ['217/Module1/Port2', '217/Module1/Port1']
+ports = ['184/Module1/Port2', '184/Module1/Port1']
 attributes = {'Controller Address': controller,
               'Controller TCP Port': port}
 
 
-class TestIxNetworkControllerDriver(unittest.TestCase):
+class TestIxNetworkControllerDriver(object):
 
-    def setUp(self):
+    def setup(self):
         self.session = create_session_from_cloudshell_config()
         self.context = create_command_context(self.session, ports, 'IxNetwork Controller', attributes)
         self.driver = IxNetworkControllerDriver()
@@ -33,7 +32,7 @@ class TestIxNetworkControllerDriver(unittest.TestCase):
         print self.driver.logger.handlers[0].baseFilename
         self.driver.logger.addHandler(logging.StreamHandler(sys.stdout))
 
-    def tearDown(self):
+    def teardown(self):
         self.driver.cleanup()
         self.session.EndReservation(self.context.reservation.reservation_id)
 

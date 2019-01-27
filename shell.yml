@@ -4,4 +4,4 @@ shell:
   driver_name: IxNetworkControllerDriver
   email: yoram-s@quali.com
   name: ixia_ixnetwork_controller
-  version: 1.6.0
+  version: 1.6.1

@@ -12,13 +12,11 @@ from cloudshell.traffic.tg_helper import get_reservation_resources, set_family_a
 from shellfoundry.releasetools.test_helper import create_session_from_cloudshell_config, create_command_context
 
 # must be str
-controller = '172.40.0.163'
-port = '8008'
 controller = 'localhost'
 port = '11009'
 
-ports = ['ixia 2g/Module1/Port1', 'ixia 2g/Module2/Port2']
-ports = ['IxVM 801/Module1/Port1', 'IxVM 801/Module1/Port2']
+ports = ['184/Module1/Port1', '184/Module1/Port2']
+ports = ['61/Module1/Port1', '61/Module2/Port2']
 ports = ['217/Module1/Port1', '217/Module1/Port2']
 attributes = [AttributeNameValue('Controller Address', controller),
               AttributeNameValue('Controller TCP Port', port)]
