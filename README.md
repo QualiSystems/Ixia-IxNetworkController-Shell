@@ -3,9 +3,9 @@
 
 # **Ixia IxNetwork Controller 1G Shell**  
 
-Release date: June 2018
+Release date: January 2018
 
-Shell version: 1.6.0
+Shell version: 1.6.1
 
 Document version: 1.0
 
@@ -24,7 +24,7 @@ Document version: 1.0
 # Overview
 A shell integrates a device model, application or other technology with CloudShell. A shell consists of a data model that defines how the device and its properties are modeled in CloudShell, along with automation that enables interaction with the device via CloudShell.
 
-**Note:** While we have an Ixia Chassis 1st gen shell, we recommend using the 2nd gen version since using a 1st gen shell may limit some shell management capabilities. For more information, see [Shell Overview – “Our Shells”](http://help.quali.com/Online%20Help/9.0/Portal/Content/CSP/LAB-MNG/Shells.htm#our-shells).
+**Note:** While we have an Ixia Chassis 1st gen shell, we recommend using the 2nd gen version since using a 1st gen shell may limit some shell management capabilities. For more information, see [Shell Overview â€“ â€œOur Shellsâ€�](http://help.quali.com/Online%20Help/9.0/Portal/Content/CSP/LAB-MNG/Shells.htm#our-shells).
 
 ### Traffic Generator Shells
 CloudShell's traffic generator shells enable you to conduct traffic test activities on Devices Under Test (DUT) or Systems Under Test (SUT) from a sandbox. In CloudShell, a traffic generator is typically modeled using a chassis resource, which represents the traffic generator device and ports, and a controller service that runs the chassis commands, such as Load Configuration File, Start Traffic and Get Statistics. Chassis and controllers are modeled by different shells, allowing you to accurately model your real-life architecture. For example, scenarios where the chassis and controller are located on different machines.
@@ -44,23 +44,23 @@ The **Ixia IxNetwork Controller** provides automation commands to run on the cha
 ### Standard version
 The **Ixia IxNetwork Controller 1G** shell is based on the Traffic Shell Standard version 3.0.0.
 
-For detailed information about the shell’s structure and attributes, see the [Traffic Shell standard](https://github.com/QualiSystems/shell-traffic-standard/blob/master/spec/traffic_standard.md) in GitHub.
+For detailed information about the shellâ€™s structure and attributes, see the [Traffic Shell standard](https://github.com/QualiSystems/shell-traffic-standard/blob/master/spec/traffic_standard.md) in GitHub.
 
 ### Supported OS
-▪ Windows
+â–ª Windows
 
 ### Requirements
 
 Release: **Ixia IxNetwork Controller 1G**
 
-▪ IxNetwork API Server: 8.0.1 GA and above
+â–ª IxNetwork API Server: 8.0.1 GA and above
 
-▪ IxNetwork Connection Manager: 8.40 EA and above 
+â–ª IxNetwork Connection Manager: 8.40 EA and above 
 
-▪ CloudShell: 8.1 and above
+â–ª CloudShell: 8.1 and above
 
 ### Automation
-This section describes the automation (driver) associated with the data model. The shell’s driver is provided as part of the shell package. There are two types of automation processes, Autoload and Resource.  Autoload is executed when creating the resource in the **Inventory** dashboard, while resource commands are run in the sandbox.
+This section describes the automation (driver) associated with the data model. The shellâ€™s driver is provided as part of the shell package. There are two types of automation processes, Autoload and Resource.  Autoload is executed when creating the resource in the **Inventory** dashboard, while resource commands are run in the sandbox.
 
 For Traffic Generator shells, commands are configured and executed from the controller service in the sandbox, with the exception of the Autoload command, which is executed when creating the resource.
 
@@ -89,12 +89,12 @@ The shell comprises:
 |ixia_ixnetwork_controller_offline_requirements.zip|Shell Python dependencies (for offline deployments only)|
 
 ## Importing and Configuring the Shell
-This section describes how to import the Ixia IxNetwork Controller 1G shell and configure and modify the shell’s devices. 
+This section describes how to import the Ixia IxNetwork Controller 1G shell and configure and modify the shellâ€™s devices. 
 
 ### Importing the shell into CloudShell
 
 **To import the shell into CloudShell:**
-  1. Make sure you have the shell’s zip package. If not, download the shell from the [Quali Community's Integrations](https://community.quali.com/integrations) page.
+  1. Make sure you have the shellâ€™s zip package. If not, download the shell from the [Quali Community's Integrations](https://community.quali.com/integrations) page.
   
   2. Backup your database.
   
@@ -104,7 +104,7 @@ This section describes how to import the Ixia IxNetwork Controller 1G shell and 
   
      ![](https://github.com/stsuberi/SaraTest/blob/master/import_package.png)
      
-  5. Browse to the location of the downloaded shell file, select the relevant *.zip* file and click **Open**. Alternatively, drag the shell’s .zip file into CloudShell Portal.
+  5. Browse to the location of the downloaded shell file, select the relevant *.zip* file and click **Open**. Alternatively, drag the shellâ€™s .zip file into CloudShell Portal.
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The service can now be added to a blueprint from the **Apps/Service** catalog's **Networking** category.  
 
@@ -138,7 +138,7 @@ For more information, see [Configuring CloudShell to Execute Python Commands in 
 3. Place these zip files in the local PyPi Server repository.
  
 ### Setting the python PythonOfflineRepositoryPath configuration key
-Before PyPi Server was introduced as CloudShell’s python package management mechanism, the `PythonOfflineRepositoryPath` key was used to set the default offline package repository on the Quali Server machine, and could be used on specific Execution Server machines to set a different folder. 
+Before PyPi Server was introduced as CloudShellâ€™s python package management mechanism, the `PythonOfflineRepositoryPath` key was used to set the default offline package repository on the Quali Server machine, and could be used on specific Execution Server machines to set a different folder. 
 
 **To set the offline python repository:**
 1. Download the *ixia_ixnetwork_controller_offline_requirements.zip* file, see [Downloading the Shell](#downloading-the-shell).
@@ -187,13 +187,13 @@ This section explains how to update your Python dependencies folder. This is req
 
 2. Extract the zip file to the suitable offline package folder(s). 
 
-3. Terminate the shell’s instance, as explained [here](http://help.quali.com/Online%20Help/9.0/Portal/Content/CSP/MNG/Mng-Exctn-Srv-Exct.htm#Terminat). 
+3. Terminate the shellâ€™s instance, as explained [here](http://help.quali.com/Online%20Help/9.0/Portal/Content/CSP/MNG/Mng-Exctn-Srv-Exct.htm#Terminat). 
 
 ### Updating online Python dependencies
 In online mode, the execution server automatically downloads and extracts the appropriate dependencies file to the online Python dependencies repository every time a new instance of the driver or script is created.
 
 **To update online Python dependencies:**
-* If there is a live instance of the shell's driver or script, terminate the shell’s instance, as explained [here](http://help.quali.com/Online%20Help/9.0/Portal/Content/CSP/MNG/Mng-Exctn-Srv-Exct.htm#Terminat). If an instance does not exist, the execution server will download the Python dependencies the next time a command of the driver or script runs.
+* If there is a live instance of the shell's driver or script, terminate the shellâ€™s instance, as explained [here](http://help.quali.com/Online%20Help/9.0/Portal/Content/CSP/MNG/Mng-Exctn-Srv-Exct.htm#Terminat). If an instance does not exist, the execution server will download the Python dependencies the next time a command of the driver or script runs.
 
 
 ## Associating a CloudShell Service to a Non-Global Domain
@@ -222,9 +222,9 @@ When you import a service shell, most shells are automatically assigned a defaul
 	
 	or
 
-	* Modify the 1G category(s) in the shell project’s configuration files to add a new category(s). See [Associating categories to 1st Gen Service Shells](https://devguide.quali.com/reference/9.0.0/associating-service-categories.html).
+	* Modify the 1G category(s) in the shell projectâ€™s configuration files to add a new category(s). See [Associating categories to 1st Gen Service Shells](https://devguide.quali.com/reference/9.0.0/associating-service-categories.html).
 
-2. Associate the shell’s service category to a domain.
+2. Associate the shellâ€™s service category to a domain.
 	1. In the **Manage** dashboard, click **Categories** from the left sidebar, or **Domains** if you are a domain admin.
 	
 	2. Select **Services Categories**.
@@ -258,7 +258,7 @@ When you import a service shell, most shells are automatically assigned a defaul
 
 4. Reserve the blueprint.
 
-5. Edit the **IxNetwork Controller** service parameters if required, see [Configuring a new service](#configuring_a_new_service).
+5. Edit the **IxNetwork Controller** service parameters if required, see [Configuring a new service](#configuring-a-new-service).
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![](https://github.com/QualiSystems/Ixia-IxNetworkController-Shell/blob/master/ixnetwork_controller_configuration_parameters.png)
 
@@ -283,10 +283,10 @@ To connect with Quali users and experts from around the world, ask questions and
 For release updates, see the shell's [GitHub releases page](https://github.com/QualiSystems/Ixia-IxNetworkController-Shell/releases).
 
 ### Known Issues
-• **Performance**: The REST API performance is very poor. Loading configuration and reserving ports can take a number of seconds, depending on the specific setup. You are advised to start idle connections on the Connection Manager to reduce startup time.
+â€¢ **Performance**: The REST API performance is very poor. Loading configuration and reserving ports can take a number of seconds, depending on the specific setup. You are advised to start idle connections on the Connection Manager to reduce startup time.
 
-• **No available connection on connection manager**: If there is no available connection on the Connection Manager, you must login to the Connection Manager and close zombie connections or create new connections.
+â€¢ **No available connection on connection manager**: If there is no available connection on the Connection Manager, you must login to the Connection Manager and close zombie connections or create new connections.
 
-• **Licensing**: If the license server on the Connection Manager/API server is not configured, **Load Configuration** might successfully run, but the ports will be in a Down state and any further operations will fail.
+â€¢ **Licensing**: If the license server on the Connection Manager/API server is not configured, **Load Configuration** might successfully run, but the ports will be in a Down state and any further operations will fail.
 
-• **Reserved ports**: If ports are reserved by other users, **Load Configuration** might successfully run, but ports will be in a Down state and any further operations will fail. 
+â€¢ **Reserved ports**: If ports are reserved by other users, **Load Configuration** might successfully run, but ports will be in a Down state and any further operations will fail. 
