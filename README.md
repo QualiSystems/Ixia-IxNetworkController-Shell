@@ -278,6 +278,8 @@ To suggest an idea for the product, see [Quali's Idea box](https://community.qua
 
 To connect with Quali users and experts from around the world, ask questions and discuss issues, see [Quali's Community forums](https://community.quali.com/forums). 
 
+To use traffic generator ports as abstract resources, see [CloudShell's Online Help](https://help.quali.com/Online%20Help/9.1/Portal/Content/CSP/LAB-MNG/Traffic-Gens-Abst.htm?Highlight=traffic%20generator).
+
 # Release Notes 
 
 For release updates, see the shell's [GitHub releases page](https://github.com/QualiSystems/Ixia-IxNetworkController-Shell/releases).
