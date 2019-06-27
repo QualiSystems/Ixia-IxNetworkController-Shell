@@ -1,0 +1,897 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Strict//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>E:\workspace\quali\Ixia-IxNetworkController-Shell\.README.md.html</title>
+
+
+<style type="text/css">
+body {
+	color: #333;
+	font: 13px/1.4 "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif;
+	padding: 0;
+	margin: 0;
+}
+
+a {
+	background: transparent;
+	color: #4183c4;
+	text-decoration: none;
+}
+
+a:active,
+a:hover {
+	outline: 0 none;
+	text-decoration: underline;
+}
+
+abbr[title] {
+	border-bottom: 1px dotted;
+}
+
+b,
+strong {
+	font-weight: bold;
+}
+
+dfn {
+	font-style: italic;
+}
+h1 {
+	font-size: 2em;
+	margin: 0.67em 0;
+}
+mark {
+	background: #ff0;
+	color: #000;
+}
+small {
+	font-size: 80%;
+}
+sub, sup {
+	font-size: 75%;
+	line-height: 0;
+	position: relative;
+	vertical-align: baseline;
+}
+sup {
+	top: -0.5em;
+}
+sub {
+	bottom: -0.25em;
+}
+img {
+	border: 0 none;
+}
+svg:not(:root) {
+	overflow: hidden;
+}
+figure {
+	margin: 1em 40px;
+}
+hr {
+	box-sizing: content-box;
+	height: 0;
+}
+
+code,
+kbd,
+pre,
+samp {
+	font-family: monospace,monospace;
+	font-size: 1em;
+}
+
+pre {
+	overflow: auto;
+	font: 12px Consolas,"Liberation Mono",Menlo,Courier,monospace;
+	margin-bottom: 0;
+	margin-top: 0;
+}
+
+.markdown-body {
+	padding: 30px;
+	font-size: 16px;
+	line-height: 1.6;
+	word-wrap: break-word;
+}
+
+.markdown-body>*:first-child {
+	margin-top: 0 !important;
+}
+
+.markdown-body>*:last-child {
+	margin-bottom: 0 !important;
+}
+
+.markdown-body .absent {
+	color: #c00;
+}
+
+.markdown-body .anchor {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	display: block;
+	padding-right: 6px;
+	padding-left: 30px;
+	margin-left: -30px;
+}
+
+.markdown-body .anchor:focus {
+	outline: none;
+}
+
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+	position: relative;
+	margin-top: 1em;
+	margin-bottom: 16px;
+	font-weight: bold;
+	line-height: 1.4;
+}
+
+.markdown-body h1 .octicon-link,
+.markdown-body h2 .octicon-link,
+.markdown-body h3 .octicon-link,
+.markdown-body h4 .octicon-link,
+.markdown-body h5 .octicon-link,
+.markdown-body h6 .octicon-link {
+	display: none;
+	color: #000;
+	vertical-align: middle;
+}
+
+.markdown-body h1:hover .anchor,
+.markdown-body h2:hover .anchor,
+.markdown-body h3:hover .anchor,
+.markdown-body h4:hover .anchor,
+.markdown-body h5:hover .anchor,
+.markdown-body h6:hover .anchor {
+	padding-left: 8px;
+	margin-left: -30px;
+	line-height: 1;
+	text-decoration: none;
+}
+
+.markdown-body h1:hover .anchor .octicon-link,
+.markdown-body h2:hover .anchor .octicon-link,
+.markdown-body h3:hover .anchor .octicon-link,
+.markdown-body h4:hover .anchor .octicon-link,
+.markdown-body h5:hover .anchor .octicon-link,
+.markdown-body h6:hover .anchor .octicon-link {
+	display: inline-block;
+}
+
+.markdown-body h1 tt,
+.markdown-body h1 code,
+.markdown-body h2 tt,
+.markdown-body h2 code,
+.markdown-body h3 tt,
+.markdown-body h3 code,
+.markdown-body h4 tt,
+.markdown-body h4 code,
+.markdown-body h5 tt,
+.markdown-body h5 code,
+.markdown-body h6 tt,
+.markdown-body h6 code {
+	font-size: inherit;
+}
+
+.markdown-body h1 {
+	padding-bottom: 0.3em;
+	font-size: 2.25em;
+	line-height: 1.2;
+	border-bottom: 1px solid #eee;
+}
+
+.markdown-body h2 {
+	padding-bottom: 0.3em;
+	font-size: 1.75em;
+	line-height: 1.225;
+	border-bottom: 1px solid #eee;
+}
+
+.markdown-body h3 {
+	font-size: 1.5em;
+	line-height: 1.43;
+}
+
+.markdown-body h4 {
+	font-size: 1.25em;
+}
+
+.markdown-body h5 {
+	font-size: 1em;
+}
+
+.markdown-body h6 {
+	font-size: 1em;
+	color: #777;
+}
+
+.markdown-body p,.markdown-body blockquote,
+.markdown-body ul,.markdown-body ol,
+.markdown-body dl,.markdown-body table,
+.markdown-body pre {
+	margin-top: 0;
+	margin-bottom: 16px;
+}
+
+.markdown-body hr {
+	height: 4px;
+	padding: 0;
+	margin: 16px 0;
+	background-color: #e7e7e7;
+	border: 0 none;
+}
+
+.markdown-body ul,
+.markdown-body ol {
+	padding-left: 2em;
+}
+
+.markdown-body ul.no-list,
+.markdown-body ol.no-list {
+	padding: 0;
+	list-style-type: none;
+}
+
+.markdown-body ul ul,
+.markdown-body ul ol,
+.markdown-body ol ol,
+.markdown-body ol ul {
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+.markdown-body li>p {
+	margin-top: 16px;
+}
+
+.markdown-body dl {
+	padding: 0;
+}
+
+.markdown-body dl dt {
+	padding: 0;
+	margin-top: 16px;
+	font-size: 1em;
+	font-style: italic;
+	font-weight: bold;
+}
+
+.markdown-body dl dd {
+	padding: 0 16px;
+	margin-bottom: 16px;
+}
+
+.markdown-body blockquote {
+	padding: 0 15px;
+	color: #777;
+	border-left: 4px solid #ddd;
+}
+
+.markdown-body blockquote>:first-child {
+	margin-top: 0;
+}
+
+.markdown-body blockquote>:last-child {
+	margin-bottom: 0;
+}
+
+.markdown-body table {
+	display: block;
+	width: 100%;
+	overflow: auto;
+	word-break: normal;
+	word-break: keep-all;
+}
+
+.markdown-body table th {
+	font-weight: bold;
+}
+
+.markdown-body table th,
+.markdown-body table td {
+	padding: 6px 13px;
+	border: 1px solid #ddd;
+}
+
+.markdown-body table tr {
+	background-color: #fff;
+	border-top: 1px solid #ccc;
+}
+
+.markdown-body table tr:nth-child(2n) {
+	background-color: #f8f8f8;
+}
+
+.markdown-body img {
+	max-width: 100%;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.markdown-body span.frame {
+	display: block;
+	overflow: hidden;
+}
+
+.markdown-body span.frame>span {
+	display: block;
+	float: left;
+	width: auto;
+	padding: 7px;
+	margin: 13px 0 0;
+	overflow: hidden;
+	border: 1px solid #ddd;
+}
+
+.markdown-body span.frame span img {
+	display: block;
+	float: left;
+}
+
+.markdown-body span.frame span span {
+	display: block;
+	padding: 5px 0 0;
+	clear: both;
+	color: #333;
+}
+
+.markdown-body span.align-center {
+	display: block;
+	overflow: hidden;
+	clear: both;
+}
+
+.markdown-body span.align-center>span {
+	display: block;
+	margin: 13px auto 0;
+	overflow: hidden;
+	text-align: center;
+}
+
+.markdown-body span.align-center span img {
+	margin: 0 auto;
+	text-align: center;
+}
+
+.markdown-body span.align-right {
+	display: block;
+	overflow: hidden;
+	clear: both;
+}
+
+.markdown-body span.align-right>span {
+	display: block;
+	margin: 13px 0 0;
+	overflow: hidden;
+	text-align: right;
+}
+
+.markdown-body span.align-right span img {
+	margin: 0;
+	text-align: right;
+}
+
+.markdown-body span.float-left {
+	display: block;
+	float: left;
+	margin-right: 13px;
+	overflow: hidden;
+}
+
+.markdown-body span.float-left span {
+	margin: 13px 0 0;
+}
+
+.markdown-body span.float-right {
+	display: block;
+	float: right;
+	margin-left: 13px;
+	overflow: hidden;
+}
+
+.markdown-body span.float-right>span {
+	display: block;
+	margin: 13px auto 0;
+	overflow: hidden;
+	text-align: right;
+}
+
+.markdown-body code,.markdown-body tt {
+	padding: 0;
+	padding-top: 0.2em;
+	padding-bottom: 0.2em;
+	margin: 0;
+	font-size: 85%;
+	background-color: rgba(0,0,0,0.04);
+	border-radius: 3px;
+}
+
+.markdown-body code:before,
+.markdown-body code:after,
+.markdown-body tt:before,
+.markdown-body tt:after {
+	letter-spacing: -0.2em;
+	content: "\00a0";
+}
+
+.markdown-body code br,
+.markdown-body tt br {
+	display: none;
+}
+
+.markdown-body del code {
+	text-decoration: inherit;
+}
+
+.markdown-body pre>code {
+	padding: 0;
+	margin: 0;
+	font-size: 100%;
+	word-break: normal;
+	white-space: pre;
+	background: transparent;
+	border: 0;
+}
+
+.markdown-body .highlight {
+	margin-bottom: 16px;
+}
+
+.markdown-body .highlight pre,
+.markdown-body pre {
+	padding: 16px;
+	overflow: auto;
+	font-size: 85%;
+	line-height: 1.45;
+	background-color: #f7f7f7;
+	border-radius: 3px;
+}
+
+.markdown-body .highlight pre {
+	margin-bottom: 0;
+	word-break: normal;
+}
+
+.markdown-body pre {
+	word-wrap: normal;
+}
+
+.markdown-body pre code,
+.markdown-body pre tt {
+	display: inline;
+	max-width: initial;
+	padding: 0;
+	margin: 0;
+	overflow: initial;
+	line-height: inherit;
+	word-wrap: normal;
+	background-color: transparent;
+	border: 0;
+}
+
+.markdown-body pre code:before,
+.markdown-body pre code:after,
+.markdown-body pre tt:before,
+.markdown-body pre tt:after {
+	content: normal;
+}
+
+.highlight .pl-coc,
+.highlight .pl-entl,
+.highlight .pl-entm,
+.highlight .pl-eoa,
+.highlight .pl-mai .pl-sf,
+.highlight .pl-mm,
+.highlight .pl-pdv,
+.highlight .pl-sc,
+.highlight .pl-som,
+.highlight .pl-sr,
+.highlight .pl-v,
+.highlight .pl-vpf {
+	color: #0086b3;
+}
+.highlight .pl-eoac,
+.highlight .pl-mdht,
+.highlight .pl-mi1,
+.highlight .pl-mri,
+.highlight .pl-va,
+.highlight .pl-vpu {
+	color: #008080;
+}
+.highlight .pl-c,
+.highlight .pl-pdc {
+	color: #b4b7b4;
+	font-style: italic;
+}
+.highlight .pl-k,
+.highlight .pl-ko,
+.highlight .pl-kolp,
+.highlight .pl-mc,
+.highlight .pl-mr,
+.highlight .pl-ms,
+.highlight .pl-s,
+.highlight .pl-sok,
+.highlight .pl-st {
+	color: #6e5494;
+}
+.highlight .pl-ef,
+.highlight .pl-enf,
+.highlight .pl-enm,
+.highlight .pl-entc,
+.highlight .pl-eoi,
+.highlight .pl-sf,
+.highlight .pl-smc {
+	color: #d12089;
+}
+.highlight .pl-ens,
+.highlight .pl-eoai,
+.highlight .pl-kos,
+.highlight .pl-mh .pl-pdh,
+.highlight .pl-mp,
+.highlight .pl-pde,
+.highlight .pl-stp {
+	color: #458;
+}
+.highlight .pl-enti {
+	color: #d12089;
+	font-weight: bold;
+}
+.highlight .pl-cce,
+.highlight .pl-enc,
+.highlight .pl-kou,
+.highlight .pl-mq {
+	color: #f93;
+}
+.highlight .pl-mp1 .pl-sf {
+	color: #458;
+	font-weight: bold;
+}
+.highlight .pl-cos,
+.highlight .pl-ent,
+.highlight .pl-md,
+.highlight .pl-mdhf,
+.highlight .pl-ml,
+.highlight .pl-pdc1,
+.highlight .pl-pds,
+.highlight .pl-s1,
+.highlight .pl-scp,
+.highlight .pl-sol {
+	color: #df5000;
+}
+.highlight .pl-c1,
+.highlight .pl-cn,
+.highlight .pl-pse,
+.highlight .pl-pse .pl-s2,
+.highlight .pl-vi {
+	color: #a31515;
+}
+.highlight .pl-mb,
+.highlight .pl-pdb {
+	color: #df5000;
+	font-weight: bold;
+}
+.highlight .pl-mi,
+.highlight .pl-pdi {
+	color: #6e5494;
+	font-style: italic;
+}
+.highlight .pl-ms1 {
+	background-color: #f5f5f5;
+}
+.highlight .pl-mdh,
+.highlight .pl-mdi {
+	font-weight: bold;
+}
+.highlight .pl-mdr {
+	color: #0086b3;
+	font-weight: bold;
+}
+.highlight .pl-s2 {
+	color: #333;
+}
+.highlight .pl-ii {
+	background-color: #df5000;
+	color: #fff;
+}
+.highlight .pl-ib {
+	background-color: #f93;
+}
+.highlight .pl-id {
+	background-color: #a31515;
+	color: #fff;
+}
+.highlight .pl-iu {
+	background-color: #b4b7b4;
+}
+.highlight .pl-mo {
+	color: #969896;
+}
+
+</style>
+
+
+<script type="text/javascript">
+
+function getDocumentScrollTop() 
+{
+   var res = document.body.scrollTop || document.documentElement.scrollTop || window.pageYOffset || 0;
+   // alert(res);
+   return res;
+}
+
+function setDocumentScrollTop(ypos) 
+{
+	window.scrollTo(0, ypos);
+}
+
+</script>
+
+
+</head>
+<body class="markdown-body">
+<p><a href="https://github.com/QualiSystems/cloudshell-shells-documentaion-templates/blob/master/cloudshell_logo.png" target="_blank" rel="noopener noreferrer"><img src="https://github.com/QualiSystems/cloudshell-shells-documentaion-templates/raw/master/cloudshell_logo.png" alt="" style="max-width:100%;" /></a></p> 
+<h1> <a id="ixia-ixnetwork-controller-1g-shell" class="anchor" href="#ixia-ixnetwork-controller-1g-shell" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><strong>Ixia IxNetwork Controller 1G Shell</strong> </h1> 
+<p>Release date: January 2018</p> 
+<p>Shell version: 1.6.3</p>
+<p>Document version: 1.0</p> 
+<h1> <a id="in-this-guide" class="anchor" href="#in-this-guide" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>In This Guide</h1> 
+<ul> 
+ <li><a href="#overview">Overview</a></li> 
+ <li><a href="#downloading-the-shell">Downloading the Shell</a></li> 
+ <li><a href="#importing-and-configuring-the-shell">Importing and Configuring the Shell</a></li> 
+ <li><a href="#updating-python-dependencies-for-shells">Updating Python Dependencies for Shells</a></li> 
+ <li><a href="#associating-a-cloudshell-service-to-a-non-global-domain">Associating a CloudShell Service to a Non-Global Domain</a></li> 
+ <li><a href="#typical-workflow">Typical Workflow</a></li> 
+ <li><a href="#references">References</a></li> 
+ <li><a href="#release-notes">Release Notes</a></li> 
+</ul> 
+<h1> <a id="overview" class="anchor" href="#overview" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Overview</h1> 
+<p>A shell integrates a device model, application or other technology with CloudShell. A shell consists of a data model that defines how the device and its properties are modeled in CloudShell, along with automation that enables interaction with the device via CloudShell.</p> 
+<p><strong>Note:</strong> While we have an Ixia Chassis 1st gen shell, we recommend using the 2nd gen version since using a 1st gen shell may limit some shell management capabilities. For more information, see <a href="http://help.quali.com/Online%20Help/9.0/Portal/Content/CSP/LAB-MNG/Shells.htm#our-shells" rel="nofollow">Shell Overview &acirc;€“ &acirc;€œOur Shells&acirc;€�</a>.</p> 
+<h3> <a id="traffic-generator-shells" class="anchor" href="#traffic-generator-shells" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Traffic Generator Shells</h3> 
+<p>CloudShell's traffic generator shells enable you to conduct traffic test activities on Devices Under Test (DUT) or Systems Under Test (SUT) from a sandbox. In CloudShell, a traffic generator is typically modeled using a chassis resource, which represents the traffic generator device and ports, and a controller service that runs the chassis commands, such as Load Configuration File, Start Traffic and Get Statistics. Chassis and controllers are modeled by different shells, allowing you to accurately model your real-life architecture. For example, scenarios where the chassis and controller are located on different machines.</p> 
+<p>For additional information on traffic generator shell architecture, and setting up and using a traffic generator in CloudShell, see the <a href="http://help.quali.com/Online%20Help/9.0/Portal/Content/CSP/LAB-MNG/Trffc-Gens.htm?Highlight=traffic%20generator%20overview" rel="nofollow">Traffic Generators Overview</a> online help topic.</p> 
+<h3> <a id="ixia-ixnetwork-controller-1g-shell-1" class="anchor" href="#ixia-ixnetwork-controller-1g-shell-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><strong>Ixia IxNetwork Controller 1G Shell</strong> </h3> 
+<p>The <strong>Ixia IxNetwork Controller 1G</strong> shell provides you with connectivity and management capabilities such as device structure discovery and power management for the <strong>Ixia IxNetwork Controller</strong>.</p> 
+<p>For more information on the <strong>Ixia IxNetwork Controller</strong>, see the official <strong>Ixia</strong> product documentation.</p> 
+<p>The <strong>Ixia IxNetwork Controller</strong> provides automation commands to run on the chassis, such as Load Configuration, Start/Stop Traffic, Get Statistics. For more information on the Ixia Chassis shell, see the following:</p> 
+<ul> 
+ <li><a href="https://community.quali.com/repos/3440/ixia-chassis-2-gen-shell" rel="nofollow">Ixia Chassis 2G Shell</a></li> 
+</ul> 
+<h3> <a id="standard-version" class="anchor" href="#standard-version" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Standard version</h3> 
+<p>The <strong>Ixia IxNetwork Controller 1G</strong> shell is based on the Traffic Shell Standard version 3.0.0.</p> 
+<p>For detailed information about the shell&acirc;€™s structure and attributes, see the <a href="https://github.com/QualiSystems/shell-traffic-standard/blob/master/spec/traffic_standard.md">Traffic Shell standard</a> in GitHub.</p> 
+<h3> <a id="supported-os" class="anchor" href="#supported-os" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Supported OS</h3> 
+<p>&acirc;–&ordf; Windows</p> 
+<h3> <a id="requirements" class="anchor" href="#requirements" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Requirements</h3> 
+<p>Release: <strong>Ixia IxNetwork Controller 1G</strong></p> 
+<p>&acirc;–&ordf; IxNetwork API Server: 8.0.1 GA and above</p> 
+<p>&acirc;–&ordf; IxNetwork Connection Manager: 8.40 EA and above</p> 
+<p>&acirc;–&ordf; CloudShell: 8.1 and above</p> 
+<h3> <a id="automation" class="anchor" href="#automation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Automation</h3> 
+<p>This section describes the automation (driver) associated with the data model. The shell&acirc;€™s driver is provided as part of the shell package. There are two types of automation processes, Autoload and Resource. Autoload is executed when creating the resource in the <strong>Inventory</strong> dashboard, while resource commands are run in the sandbox.</p> 
+<p>For Traffic Generator shells, commands are configured and executed from the controller service in the sandbox, with the exception of the Autoload command, which is executed when creating the resource.</p> 
+<table> 
+ <thead> 
+  <tr> 
+   <th align="left">Command</th> 
+   <th align="left">Description</th> 
+  </tr> 
+ </thead> 
+ <tbody> 
+  <tr> 
+   <td align="left">Autoload</td> 
+   <td align="left">Discovers the chassis, its hierarchy and attributes when creating the resource. The command can be rerun in the <strong>Inventory</strong> dashboard and not in the sandbox, as for other commands.</td> 
+  </tr> 
+  <tr> 
+   <td align="left">Load Configuration</td> 
+   <td align="left">Loads configuration and reserves ports.<br />Set the command input as follows:<br />* <strong>Ixia config file name</strong> (ixn_config_file_name (String)): Full path to the Ixia configuration file name.</td> 
+  </tr> 
+  <tr> 
+   <td align="left">Start ARP/ND</td> 
+   <td align="left">Send ARP/ND for all protocols.</td> 
+  </tr> 
+  <tr> 
+   <td align="left">Start Protocols</td> 
+   <td align="left">Starts all protocols.</td> 
+  </tr> 
+  <tr> 
+   <td align="left">Stop Protocols</td> 
+   <td align="left">Stops all protocols.</td> 
+  </tr> 
+  <tr> 
+   <td align="left">Start Traffic</td> 
+   <td align="left">Starts L2-3 traffic.<br />Possible values:<br />* <strong>Blocking</strong>: <strong>True</strong>: Returns after traffic finishes to run<br />* <strong>False</strong>: Returns immediately</td> 
+  </tr> 
+  <tr> 
+   <td align="left">Stop Traffic</td> 
+   <td align="left">Stops L2-L3 traffic.</td> 
+  </tr> 
+  <tr> 
+   <td align="left">Get Statistics</td> 
+   <td align="left">Gets view statistics.<br />Possible values:<br />* <strong>View Name</strong>: <strong>Port statistics</strong>, <strong>Traffic item statistics</strong>, <strong>Flow statistics</strong>, etc.<br />* <strong>Output type</strong>: <strong>CSV</strong>, <strong>JSON</strong>. If <strong>CSV</strong>, the statistics will be attached to the blueprint csv file.</td> 
+  </tr> 
+  <tr> 
+   <td align="left">Run Quick Test</td> 
+   <td align="left">Runs Quick test.<br />Set the command inputs as follows:<br />* <strong>Quick Test Name</strong>: Name of quick test to run.</td> 
+  </tr> 
+ </tbody> 
+</table> 
+<h1> <a id="downloading-the-shell" class="anchor" href="#downloading-the-shell" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Downloading the Shell</h1> 
+<p>The <strong>Ixia IxNetwork Controller 1G</strong> shell is available from the <a href="https://community.quali.com/integrations" rel="nofollow">Quali Community Integrations</a> page.</p> 
+<p>Download the files into a temporary location on your local machine.</p> 
+<p>The shell comprises:</p> 
+<table> 
+ <thead> 
+  <tr> 
+   <th align="left">File name</th> 
+   <th align="left">Description</th> 
+  </tr> 
+ </thead> 
+ <tbody> 
+  <tr> 
+   <td align="left">ixia_ixnetwork_controller.zip</td> 
+   <td align="left">IxNetwork Controller 1G shell package</td> 
+  </tr> 
+  <tr> 
+   <td align="left">ixia_ixnetwork_controller_offline_requirements.zip</td> 
+   <td align="left">Shell Python dependencies (for offline deployments only)</td> 
+  </tr> 
+ </tbody> 
+</table> 
+<h2> <a id="importing-and-configuring-the-shell" class="anchor" href="#importing-and-configuring-the-shell" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Importing and Configuring the Shell</h2> 
+<p>This section describes how to import the Ixia IxNetwork Controller 1G shell and configure and modify the shell&acirc;€™s devices.</p> 
+<h3> <a id="importing-the-shell-into-cloudshell" class="anchor" href="#importing-the-shell-into-cloudshell" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Importing the shell into CloudShell</h3> 
+<p><strong>To import the shell into CloudShell:</strong></p> 
+<ol> 
+ <li> <p>Make sure you have the shell&acirc;€™s zip package. If not, download the shell from the <a href="https://community.quali.com/integrations" rel="nofollow">Quali Community's Integrations</a> page.</p> </li> 
+ <li> <p>Backup your database.</p> </li> 
+ <li> <p>Log in to CloudShell Portal as administrator of the relevant domain.</p> </li> 
+ <li> <p>In the user menu select <strong>Import Package</strong>.</p> <p><a href="https://github.com/stsuberi/SaraTest/blob/master/import_package.png" target="_blank" rel="noopener noreferrer"><img src="https://github.com/stsuberi/SaraTest/raw/master/import_package.png" alt="" style="max-width:100%;" /></a></p> </li> 
+ <li> <p>Browse to the location of the downloaded shell file, select the relevant <em>.zip</em> file and click <strong>Open</strong>. Alternatively, drag the shell&acirc;€™s .zip file into CloudShell Portal.</p> </li> 
+</ol> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The service can now be added to a blueprint from the <strong>Apps/Service</strong> catalog's <strong>Networking</strong> category.</p> 
+<h3> <a id="offline-installation-of-a-shell" class="anchor" href="#offline-installation-of-a-shell" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Offline installation of a shell</h3> 
+<p><strong>Note:</strong> Offline installation instructions are relevant only if CloudShell Execution Server has no access to PyPi. You can skip this section if your execution server has access to PyPi. For additional information, see the online help topic on offline dependencies.</p> 
+<p>In offline mode, import the shell into CloudShell and place any dependencies in the appropriate dependencies folder. The dependencies folder may differ, depending on the CloudShell version you are using:</p> 
+<ul> 
+ <li> <p>For CloudShell version 8.3 and above, see <a href="#adding-shell-and-script-packages-to-the-local-pypi-server-repository">Adding Shell and script packages to the local PyPi Server repository</a>.</p> </li> 
+ <li> <p>For CloudShell version 8.2, perform the appropriate procedure: <a href="#adding-shell-and-script-packages-to-the-local-pypi-server-repository">Adding Shell and script packages to the local PyPi Server repository</a> or <a href="#setting-the-python-pythonofflinerepositorypath-configuration-key">Setting the python pythonOfflineRepositoryPath configuration key</a>.</p> </li> 
+ <li> <p>For CloudShell versions prior to 8.2, see <a href="#setting-the-python-pythonofflinerepositorypath-configuration-key">Setting the python pythonOfflineRepositoryPath configuration key</a>.</p> </li> 
+</ul> 
+<h3> <a id="adding-shell-and-script-packages-to-the-local-pypi-server-repository" class="anchor" href="#adding-shell-and-script-packages-to-the-local-pypi-server-repository" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Adding shell and script packages to the local PyPi Server repository</h3> 
+<p>If your Quali Server and/or execution servers work offline, you will need to copy all required Python packages, including the out-of-the-box ones, to the PyPi Server's repository on the Quali Server computer (by default <em>C:\Program Files (x86)\QualiSystems\CloudShell\Server\Config\Pypi Server Repository</em>).</p> 
+<p>For more information, see <a href="http://help.quali.com/Online%20Help/9.0/Portal/Content/Admn/Cnfgr-Pyth-Env-Wrk-Offln.htm?Highlight=Configuring%20CloudShell%20to%20Execute%20Python%20Commands%20in%20Offline%20Mode" rel="nofollow">Configuring CloudShell to Execute Python Commands in Offline Mode</a>.</p> 
+<p><strong>To add Python packages to the local PyPi Server repository:</strong></p> 
+<ol> 
+ <li> <p>If you haven't created and configured the local PyPi Server repository to work with the execution server, perform the steps in <a href="http://help.quali.com/Online%20Help/9.0/Portal/Content/Admn/Cnfgr-Pyth-Env-Wrk-Offln.htm?Highlight=offline%20dependencies#Add" rel="nofollow">Add Python packages to the local PyPi Server repository (offlinemode)</a>.</p> </li> 
+ <li> <p>For each shell or script you add into CloudShell, do one of the following (from an online computer):</p> 
+  <ul> 
+   <li> <p>Connect to the Internet and download each dependency specified in the <em>requirements.txt</em> file with the following command: <code>pip download -r requirements.txt</code>. The shell or script's requirements are downloaded as zip files.</p> </li> 
+   <li> <p>In the <a href="https://community.quali.com/integrations" rel="nofollow">Quali Community's Integrations</a> page, locate the shell and click the shell's <strong>Download</strong> link. In the page that is displayed, from the Downloads area, extract the dependencies package zip file.</p> </li> 
+  </ul> </li> 
+ <li> <p>Place these zip files in the local PyPi Server repository.</p> </li> 
+</ol> 
+<h3> <a id="setting-the-python-pythonofflinerepositorypath-configuration-key" class="anchor" href="#setting-the-python-pythonofflinerepositorypath-configuration-key" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Setting the python PythonOfflineRepositoryPath configuration key</h3> 
+<p>Before PyPi Server was introduced as CloudShell&acirc;€™s python package management mechanism, the <code>PythonOfflineRepositoryPath</code> key was used to set the default offline package repository on the Quali Server machine, and could be used on specific Execution Server machines to set a different folder.</p> 
+<p><strong>To set the offline python repository:</strong></p> 
+<ol> 
+ <li> <p>Download the <em>ixia_ixnetwork_controller_offline_requirements.zip</em> file, see <a href="#downloading-the-shell">Downloading the Shell</a>.</p> </li> 
+ <li> <p>Unzip it to a local repository. Make sure the execution server has access to this folder.</p> </li> 
+ <li> <p>On the Quali Server machine, in the <em>~\CloudShell\Server\customer.config</em> file, add the following key to specify the path to the default python package folder (for all Execution Servers):<br /> <code>&lt;add key=&quot;PythonOfflineRepositoryPath&quot; value=&quot;repository full path&quot;/&gt;</code></p> </li> 
+ <li> <p>If you want to override the default folder for a specific Execution Server, on the Execution Server machine, in the <em>~TestShell\Execution Server\customer.config</em> file, add the following key:<br /> <code>&lt;add key=&quot;PythonOfflineRepositoryPath&quot; value=&quot;repository full path&quot;/&gt;</code></p> </li> 
+ <li> <p>Restart the Execution Server.</p> </li> 
+</ol> 
+<h3> <a id="configuring-a-new-service" class="anchor" href="#configuring-a-new-service" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Configuring a new service</h3> 
+<p>This section explains how to set the controller's default values in the service.</p> 
+<p>The controller service enables end users to use the traffic generator chassis to perform their testing activity, including starting and stopping traffic, getting statistics and loading configurations.</p> 
+<p>For more information, see <a href="http://help.quali.com/Online%20Help/9.0/Portal/Content/CSP/LAB-MNG/Services.htm?Highlight=services" rel="nofollow">Services Overview</a>.</p> 
+<p><strong>To configure a service for the device:</strong></p> 
+<ol> 
+ <li> <p>In CloudShell Resource Manager, in the <strong>Admin</strong> tab, click <strong>Resource Families</strong>.</p> </li> 
+ <li> <p>In the <strong>Traffic Generator Controller</strong> folder, select <strong>IxNetwork Controller</strong>.</p> </li> 
+</ol> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/QualiSystems/Ixia-IxNetworkController-Shell/blob/master/ixnetwork_controller.png" target="_blank" rel="noopener noreferrer"><img src="https://github.com/QualiSystems/Ixia-IxNetworkController-Shell/raw/master/ixnetwork_controller.png" alt="" style="max-width:100%;" /></a></p> 
+<ol start="3"> 
+ <li> <p>In the <strong>Attributes</strong> tab, enter the <strong>Default Values</strong> for the <strong>IxNetwork Controller</strong> service as follows:</p> 
+  <ul> 
+   <li> <strong>Controller Address</strong> - IP address of the API Server/Connection Manager. Default is localhost.</li> 
+   <li> <strong>Controller TCP Port</strong> - TCP port of the API Server/Connection Manager. Default is 11009.</li> 
+   <li> <strong>Password</strong> - Password used in deployment (optional).</li> 
+   <li> <strong>User</strong> - Username used in deployment (optional).</li> 
+  </ul> </li> 
+ <li> <p>Click <strong>Save</strong>.</p> </li> 
+</ol> 
+<h1> <a id="updating-python-dependencies-for-shells" class="anchor" href="#updating-python-dependencies-for-shells" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Updating Python Dependencies for Shells</h1> 
+<p>This section explains how to update your Python dependencies folder. This is required when you upgrade a shell that uses new/updated dependencies. It applies to both online and offline dependencies.</p> 
+<h3> <a id="updating-offline-python-dependencies" class="anchor" href="#updating-offline-python-dependencies" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Updating offline Python dependencies</h3> 
+<p><strong>To update offline Python dependencies:</strong></p> 
+<ol> 
+ <li> <p>Download the latest Python dependencies package zip file locally.</p> </li> 
+ <li> <p>Extract the zip file to the suitable offline package folder(s).</p> </li> 
+ <li> <p>Terminate the shell&acirc;€™s instance, as explained <a href="http://help.quali.com/Online%20Help/9.0/Portal/Content/CSP/MNG/Mng-Exctn-Srv-Exct.htm#Terminat" rel="nofollow">here</a>.</p> </li> 
+</ol> 
+<h3> <a id="updating-online-python-dependencies" class="anchor" href="#updating-online-python-dependencies" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Updating online Python dependencies</h3> 
+<p>In online mode, the execution server automatically downloads and extracts the appropriate dependencies file to the online Python dependencies repository every time a new instance of the driver or script is created.</p> 
+<p><strong>To update online Python dependencies:</strong></p> 
+<ul> 
+ <li>If there is a live instance of the shell's driver or script, terminate the shell&acirc;€™s instance, as explained <a href="http://help.quali.com/Online%20Help/9.0/Portal/Content/CSP/MNG/Mng-Exctn-Srv-Exct.htm#Terminat" rel="nofollow">here</a>. If an instance does not exist, the execution server will download the Python dependencies the next time a command of the driver or script runs.</li> 
+</ul> 
+<h2> <a id="associating-a-cloudshell-service-to-a-non-global-domain" class="anchor" href="#associating-a-cloudshell-service-to-a-non-global-domain" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Associating a CloudShell Service to a Non-Global Domain</h2> 
+<p>In order to expose a service to users of a domain that is not the Global domain, you must associate the service to the domain. To do this, you need to associate the service to a category that is assigned to the domain.</p> 
+<p>When you import a service shell, most shells are automatically assigned a default service category which is associated with the Global domain. For custom shells, this may not be true.</p> 
+<p><strong>To associate the Ixia IxNetwork Controller 1G service to a non-global domain:</strong></p> 
+<p><strong>Note:</strong> The association process differs depending on the type of shell - second generation (2G) shell or first generation (1G) shell. The instructions below detail the steps for a 1G service shell.</p> 
+<ol> 
+ <li> <p>(Optional) You can associate the service to a service category that already exists in CloudShell or associate the service to a new category.</p> <p><strong>Note:</strong> If you do not want to change the category(s) of this shell, you can use the default category that comes out-of-the-box (if it exists).</p> 
+  <ul> 
+   <li> <p>Associate the service family to an existing category(s).</p> 
+    <ol> 
+     <li> <p>In Resource Manager Client, open the <strong>Resource Families</strong> explorer and click the relevant service family.</p> </li> 
+     <li> <p>From the right pane, open the <strong>Categories</strong> tab.</p> </li> 
+     <li> <p>Click <strong>Add</strong>. The <strong>Select Category</strong> dialog box is displayed.</p> </li> 
+     <li> <p>Select a category from the catalog and click <strong>OK</strong>.</p> </li> 
+    </ol> </li> 
+  </ul> <p>or</p> 
+  <ul> 
+   <li>Modify the 1G category(s) in the shell project&acirc;€™s configuration files to add a new category(s). See <a href="https://devguide.quali.com/reference/9.0.0/associating-service-categories.html" rel="nofollow">Associating categories to 1st Gen Service Shells</a>.</li> 
+  </ul> </li> 
+ <li> <p>Associate the shell&acirc;€™s service category to a domain.</p> 
+  <ol> 
+   <li> <p>In the <strong>Manage</strong> dashboard, click <strong>Categories</strong> from the left sidebar, or <strong>Domains</strong> if you are a domain admin.</p> </li> 
+   <li> <p>Select <strong>Services Categories</strong>.</p> </li> 
+   <li> <p>Click the service category that is associated with your service shell.</p> </li> 
+   <li> <p>In the <strong>Edit Category</strong> dialog box, from the <strong>Domains</strong> drop-down list, select the desired domain(s).</p> </li> 
+   <li> <p>Click <strong>Save</strong>.</p> </li> 
+  </ol> </li> 
+</ol> 
+<h1> <a id="typical-workflow" class="anchor" href="#typical-workflow" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Typical Workflow</h1> 
+<p><strong>Workflow 1</strong> - <em>Using the IxNetwork controller to run IxNetwork traffic</em></p> 
+<ol> 
+ <li> <p>In CloudShell Portal, in the top left section of the <strong>Blueprint Catalog</strong>, click <strong>+ Create Blueprint</strong>.</p> </li> 
+ <li> <p>In the blueprint toolbar, click <strong>Resource</strong> and drag the Ixia Chassis resource into the diagram.</p> 
+  <ol> 
+   <li> <p>Add the required number of Ixia Chassis resource ports to the blueprint. The number of Ixia Chassis resource ports in the blueprint should match the number of ports in the IxNetwork configuration. For example: if you have a configuration with two ports:</p> <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/QualiSystems/Ixia-IxNetworkController-Shell/blob/master/ixnetwork_controller_configuration_two_ports.png" target="_blank" rel="noopener noreferrer"><img src="https://github.com/QualiSystems/Ixia-IxNetworkController-Shell/raw/master/ixnetwork_controller_configuration_two_ports.png" alt="" style="max-width:100%;" /></a></p> </li> 
+   <li> <p>Hover over the Ixia Chassis resource and select <strong>More Options&gt;Add sub-resource</strong> from the context menu.</p> </li> 
+   <li> <p>Use the search and filtering options to find the port resources you want to use.</p> </li> 
+   <li> <p>Select the port resources from the pane and drag them into the workspace. The ports are displayed in the <strong>Resource Structure</strong> tab of the chassis resource.</p> <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/QualiSystems/Ixia-IxNetworkController-Shell/blob/master/ixnetwork_controller_blueprint_two_ports.png" target="_blank" rel="noopener noreferrer"><img src="https://github.com/QualiSystems/Ixia-IxNetworkController-Shell/raw/master/ixnetwork_controller_blueprint_two_ports.png" alt="" style="max-width:100%;" /></a></p> </li> 
+  </ol> </li> 
+ <li> <p>In the blueprint toolbar, click <strong>App/Service&gt;Traffic Generator Controllers</strong> and drag the <strong>IxNetwork Controller</strong> service into the diagram.</p> </li> 
+ <li> <p>Reserve the blueprint.</p> </li> 
+ <li> <p>Edit the <strong>IxNetwork Controller</strong> service parameters if required, see <a href="#configuring-a-new-service">Configuring a new service</a>.</p> </li> 
+</ol> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/QualiSystems/Ixia-IxNetworkController-Shell/blob/master/ixnetwork_controller_configuration_parameters.png" target="_blank" rel="noopener noreferrer"><img src="https://github.com/QualiSystems/Ixia-IxNetworkController-Shell/raw/master/ixnetwork_controller_configuration_parameters.png" alt="" style="max-width:100%;" /></a></p> 
+<ol start="6"> 
+ <li> <p>Map the configuration ports to the blueprint ports. For each port in the IxNetwork configuration, assign a physical port from the ports in the blueprint.</p> 
+  <ol> 
+   <li>Hover over the Ixia chassis resource and select <strong>Structure</strong> from the context menu. The <strong>Resource Structure</strong> side pane is displayed, listing the resource's ports.</li> 
+   <li>For each port, click the down arrow and select <strong>Attributes</strong>.</li> 
+   <li>Set the <strong>Logical Name</strong> to the port name in the IxNetwork configuration.</li> 
+  </ol> <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/QualiSystems/Ixia-IxNetworkController-Shell/blob/master/ixnetwork_controller_mapping_ports.png" target="_blank" rel="noopener noreferrer"><img src="https://github.com/QualiSystems/Ixia-IxNetworkController-Shell/raw/master/ixnetwork_controller_mapping_ports.png" alt="" style="max-width:100%;" /></a></p> </li> 
+</ol> 
+<h1> <a id="references" class="anchor" href="#references" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>References</h1> 
+<p>To download and share integrations, see <a href="https://community.quali.com/integrations" rel="nofollow">Quali Community's Integrations</a>.</p> 
+<p>For instructional training and documentation, see <a href="https://www.quali.com/university/" rel="nofollow">Quali University</a>.</p> 
+<p>To suggest an idea for the product, see <a href="https://community.quali.com/ideabox" rel="nofollow">Quali's Idea box</a>.</p> 
+<p>To connect with Quali users and experts from around the world, ask questions and discuss issues, see <a href="https://community.quali.com/forums" rel="nofollow">Quali's Community forums</a>.</p> 
+<h1> <a id="release-notes" class="anchor" href="#release-notes" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Release Notes</h1> 
+<p>For release updates, see the shell's <a href="https://github.com/QualiSystems/Ixia-IxNetworkController-Shell/releases">GitHub releases page</a>.</p> 
+<h2> <a id="known-issues" class="anchor" href="#known-issues" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Known Issues</h2> 
+<ul> 
+ <li> <p><strong>Performance</strong>: The REST API performance is very poor. Loading configuration and reserving ports can take a number of seconds, depending on the specific setup. You are advised to start idle connections on the Connection Manager to reduce startup time.</p> </li> 
+ <li> <p><strong>No available connection on connection manager</strong>: If there is no available connection on the Connection Manager, you must login to the Connection Manager and close zombie connections or create new connections.</p> </li> 
+ <li> <p><strong>Licensing</strong>: If the license server on the Connection Manager/API server is not configured, <strong>Load Configuration</strong> might successfully run, but the ports will be in a Down state and any further operations will fail.</p> </li> 
+ <li> <p><strong>Reserved ports</strong>: If ports are reserved by other users, <strong>Load Configuration</strong> might successfully run, but ports will be in a Down state and any further operations will fail.</p> </li> 
+</ul>
+</body>
+</html>

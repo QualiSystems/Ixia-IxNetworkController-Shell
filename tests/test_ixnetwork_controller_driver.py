@@ -11,15 +11,23 @@ from shellfoundry.releasetools.test_helper import create_session_from_cloudshell
 
 from src.driver import IxNetworkControllerDriver
 
-controller = '172.40.0.228'
-port = '8008'
+ports = ['61/Module1/Port2', '61/Module2/Port1']
+ports = ['207/Module1/Port2', '207/Module2/Port1']
 
-ports = ['IxVM 801/Module1/Port1', 'IxVM 801/Module1/Port2']
-ports = ['ixia 2g/Module1/Port1', 'ixia 2g/Module2/Port2']
-ports = ['217/Module1/Port2', '217/Module1/Port1']
-ports = ['184/Module1/Port2', '184/Module1/Port1']
+controller = 'localhost'
+port = '11009'
+
+controller = '192.168.65.73'
+port = '443'
+
+ports = ['6553/Module1/Port2', '6553/Module1/Port1']
+
+config='test_config_ngpf.ixncfg'
+
 attributes = {'Controller Address': controller,
-              'Controller TCP Port': port}
+              'Controller TCP Port': port,
+              'User': 'admin',
+              'Password': 'DxTbqlSgAVPmrDLlHvJrsA=='}
 
 
 class TestIxNetworkControllerDriver(object):
@@ -29,8 +37,8 @@ class TestIxNetworkControllerDriver(object):
         self.context = create_command_context(self.session, ports, 'IxNetwork Controller', attributes)
         self.driver = IxNetworkControllerDriver()
         self.driver.initialize(self.context)
-        print self.driver.logger.handlers[0].baseFilename
         self.driver.logger.addHandler(logging.StreamHandler(sys.stdout))
+        self.driver.logger.info('logfile = {}'.format(self.driver.logger.handlers[0].baseFilename))
 
     def teardown(self):
         self.driver.cleanup()
@@ -46,20 +54,24 @@ class TestIxNetworkControllerDriver(object):
                                                       'Ixia Chassis Shell 2G.GenericTrafficGeneratorPort')
         set_family_attribute(self.session, reservation_ports[0], 'Logical Name', 'Port 1')
         set_family_attribute(self.session, reservation_ports[1], 'Logical Name', 'Port 2')
-        self.driver.load_config(self.context, path.join(path.dirname(__file__), 'test_config_840.ixncfg'))
+        self.driver.load_config(self.context, path.join(path.dirname(__file__), config))
 
     def test_run_traffic(self):
         self.test_load_config()
         self.driver.send_arp(self.context)
+        self.driver.start_protocols(self.context)
+        import time
+        time.sleep(8)
         self.driver.start_traffic(self.context, 'False')
         self.driver.stop_traffic(self.context)
         stats = self.driver.get_statistics(self.context, 'Port Statistics', 'JSON')
-        assert(int(stats['Port 1']['Frames Tx.']) <= 1600)
+        assert(int(stats['Port 1']['Frames Tx.']) >= 200)
+        assert(int(stats['Port 1']['Frames Tx.']) <= 1800)
         self.driver.start_traffic(self.context, 'True')
         stats = self.driver.get_statistics(self.context, 'Port Statistics', 'JSON')
-        assert(int(stats['Port 1']['Frames Tx.']) == 1600)
+        assert(int(stats['Port 1']['Frames Tx.']) >= 2000)
         stats = self.driver.get_statistics(self.context, 'Port Statistics', 'csv')
-        print stats
+        print(stats)
 
     def negative_tests(self):
         reservation_ports = get_reservation_resources(self.session, self.context.reservation.reservation_id,
@@ -70,13 +82,13 @@ class TestIxNetworkControllerDriver(object):
         set_family_attribute(self.session, reservation_ports[0], 'Logical Name', 'Port 1')
         set_family_attribute(self.session, reservation_ports[1], 'Logical Name', '')
         self.assertRaises(Exception, self.driver.load_config, self.context,
-                          path.join(path.dirname(__file__), 'test_config_840.ixncfg'))
+                          path.join(path.dirname(__file__), config))
         set_family_attribute(self.session, reservation_ports[1], 'Logical Name', 'Port 1')
         self.assertRaises(Exception, self.driver.load_config, self.context,
-                          path.join(path.dirname(__file__), 'test_config_840.ixncfg'))
+                          path.join(path.dirname(__file__), config))
         set_family_attribute(self.session, reservation_ports[1], 'Logical Name', 'Port x')
         self.assertRaises(Exception, self.driver.load_config, self.context,
-                          path.join(path.dirname(__file__), 'test_config_840.ixncfg'))
+                          path.join(path.dirname(__file__), config))
         # cleanup
         set_family_attribute(self.session, reservation_ports[1], 'Logical Name', 'Port 2')
 
@@ -87,7 +99,7 @@ class TestIxNetworkControllerDriver(object):
                                                       'Ixia Chassis Shell 2G.GenericTrafficGeneratorPort')
         set_family_attribute(self.session, reservation_ports[0], 'Logical Name', 'Port 1')
         set_family_attribute(self.session, reservation_ports[1], 'Logical Name', 'Port 2')
-        self.driver.load_config(self.context, path.join(path.dirname(__file__), 'quick_tests_840.ixncfg'))
+        self.driver.load_config(self.context, path.join(path.dirname(__file__), config))
         print self.driver.run_quick_test(self.context, 'QuickTest3')
 
 

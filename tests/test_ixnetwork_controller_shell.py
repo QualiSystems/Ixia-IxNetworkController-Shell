@@ -11,15 +11,22 @@ from cloudshell.api.cloudshell_api import AttributeNameValue, InputNameValue
 from cloudshell.traffic.tg_helper import get_reservation_resources, set_family_attribute
 from shellfoundry.releasetools.test_helper import create_session_from_cloudshell_config, create_command_context
 
-# must be str
+ports = ['61/Module1/Port1', '61/Module2/Port2']
+ports = ['207/Module1/Port1', '207/Module2/Port2']
+
 controller = 'localhost'
 port = '11009'
 
-ports = ['184/Module1/Port1', '184/Module1/Port2']
-ports = ['61/Module1/Port1', '61/Module2/Port2']
-ports = ['217/Module1/Port1', '217/Module1/Port2']
+controller = '192.168.65.73'
+port = '443'
+ports = ['6553/Module1/Port2', '6553/Module1/Port1']
+
+config='test_config_ngpf.ixncfg'
+
 attributes = [AttributeNameValue('Controller Address', controller),
-              AttributeNameValue('Controller TCP Port', port)]
+              AttributeNameValue('Controller TCP Port', port),
+              AttributeNameValue('User', 'admin'),
+              AttributeNameValue('Password', 'admin')]
 
 
 class TestIxNetworkControllerShell(unittest.TestCase):
@@ -70,18 +77,14 @@ class TestIxNetworkControllerShell(unittest.TestCase):
         print('preferences attributes = {}'.format(prefs_attrs.Output))
 
     def test_load_config(self):
-        self._load_config(path.join(path.dirname(__file__), 'test_config_840.ixncfg'))
+        self._load_config(path.join(path.dirname(__file__), config))
 
     def test_run_traffic(self):
-        self._load_config(path.join(path.dirname(__file__), 'test_config_840.ixncfg'))
-        self.session.ExecuteCommand(self.context.reservation.reservation_id, 'IxNetwork Controller', 'Service',
-                                    'send_arp')
+        self._load_config(path.join(path.dirname(__file__), config))
         self.session.ExecuteCommand(self.context.reservation.reservation_id, 'IxNetwork Controller', 'Service',
                                     'send_arp')
         self.session.ExecuteCommand(self.context.reservation.reservation_id, 'IxNetwork Controller', 'Service',
                                     'start_protocols')
-        self.session.ExecuteCommand(self.context.reservation.reservation_id, 'IxNetwork Controller', 'Service',
-                                    'stop_protocols')
         self.session.ExecuteCommand(self.context.reservation.reservation_id, 'IxNetwork Controller', 'Service',
                                     'start_traffic', [InputNameValue('blocking', 'True')])
         self.session.ExecuteCommand(self.context.reservation.reservation_id, 'IxNetwork Controller', 'Service',
@@ -89,7 +92,7 @@ class TestIxNetworkControllerShell(unittest.TestCase):
         stats = self.session.ExecuteCommand(self.context.reservation.reservation_id, 'IxNetwork Controller', 'Service',
                                             'get_statistics', [InputNameValue('view_name', 'Port Statistics'),
                                                                InputNameValue('output_type', 'JSON')])
-        assert(int(json.loads(stats.Output)['Port 1']['Frames Tx.']) >= 1600)
+        assert(int(json.loads(stats.Output)['Port 1']['Frames Tx.']) >= 2000)
 
     def test_run_quick_test(self):
         self._load_config(path.join(path.dirname(__file__), 'quick_tests_840.ixncfg'))

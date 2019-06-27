@@ -20,7 +20,7 @@ class IxnHandler(TrafficHandler):
         self.logger = logger
 
         tcl_server = context.resource.attributes['Controller Address']
-        tcl_port = context.resource.attributes['Controller TCP Port']
+        tcl_port = int(context.resource.attributes['Controller TCP Port'])
 
         self.ixn = init_ixn(ApiType.rest, self.logger)
 
@@ -28,8 +28,15 @@ class IxnHandler(TrafficHandler):
             tcl_server = 'localhost'
         if not tcl_port:
             tcl_port = 11009
-        self.logger.debug("connecting to tcl server {} at {} port".format(tcl_server, tcl_port))
-        self.ixn.connect(tcl_server=tcl_server, tcl_port=tcl_port)
+        if tcl_port == 443:
+            user = context.resource.attributes['User']
+            encripted_password = context.resource.attributes['Password']
+            password = CloudShellSessionContext(context).get_api().DecryptPassword(encripted_password).Value
+            auth = (user, password)
+        else:
+            auth = None
+        self.logger.debug("connecting to tcl server {} at {} port with auth {}".format(tcl_server, tcl_port, auth))
+        self.ixn.connect(api_server=tcl_server, api_port=tcl_port, auth=auth)
 
     def tearDown(self):
         for port in self.ixn.root.get_objects_by_type('vport'):
@@ -38,6 +45,7 @@ class IxnHandler(TrafficHandler):
 
     def load_config(self, context, ixia_config_file_name):
 
+        self.ixn.new_config()
         self.ixn.load_config(ixia_config_file_name)
         config_ports = self.ixn.root.get_children('vport')
 

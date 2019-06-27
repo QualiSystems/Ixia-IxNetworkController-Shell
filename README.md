@@ -5,7 +5,7 @@
 
 Release date: January 2018
 
-Shell version: 1.6.1
+Shell version: 1.6.4
 
 Document version: 1.0
 
@@ -282,11 +282,11 @@ To connect with Quali users and experts from around the world, ask questions and
 
 For release updates, see the shell's [GitHub releases page](https://github.com/QualiSystems/Ixia-IxNetworkController-Shell/releases).
 
-### Known Issues
-â€¢ **Performance**: The REST API performance is very poor. Loading configuration and reserving ports can take a number of seconds, depending on the specific setup. You are advised to start idle connections on the Connection Manager to reduce startup time.
+## Known Issues
+- **Performance**: The REST API performance is very poor. Loading configuration and reserving ports can take a number of seconds, depending on the specific setup. You are advised to start idle connections on the Connection Manager to reduce startup time.
 
-â€¢ **No available connection on connection manager**: If there is no available connection on the Connection Manager, you must login to the Connection Manager and close zombie connections or create new connections.
+- **No available connection on connection manager**: If there is no available connection on the Connection Manager, you must login to the Connection Manager and close zombie connections or create new connections.
 
-â€¢ **Licensing**: If the license server on the Connection Manager/API server is not configured, **Load Configuration** might successfully run, but the ports will be in a Down state and any further operations will fail.
+- **Licensing**: If the license server on the Connection Manager/API server is not configured, **Load Configuration** might successfully run, but the ports will be in a Down state and any further operations will fail.
 
-â€¢ **Reserved ports**: If ports are reserved by other users, **Load Configuration** might successfully run, but ports will be in a Down state and any further operations will fail. 
+- **Reserved ports**: If ports are reserved by other users, **Load Configuration** might successfully run, but ports will be in a Down state and any further operations will fail. 
